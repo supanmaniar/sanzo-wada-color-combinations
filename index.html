@@ -94,6 +94,9 @@ transition:background-color .2s var(--ease),box-shadow .2s var(--ease),font-weig
 .seg button:hover{background:var(--hover)}
 .seg button[aria-pressed=true]{background:var(--segactive);font-weight:600;
 box-shadow:0 1px 3px rgba(0,0,0,.12),0 1px 1px rgba(0,0,0,.06)}
+.seg.multi button[aria-pressed=true]{background:var(--accent);color:var(--card);font-weight:600;
+box-shadow:0 1px 3px rgba(5,18,48,.22)}
+.seg.multi button[aria-pressed=true]:hover{background:var(--accent);opacity:.9}
 .btn{background-color:var(--seg);color:var(--fg);border:0;border-radius:var(--r-md);padding:.5rem .85rem;
 font-size:.85rem;font-family:inherit;font-weight:500;cursor:pointer;
 transition:background-color .2s var(--ease),transform .15s var(--ease)}
@@ -300,6 +303,14 @@ html{scroll-behavior:auto}}
           <button data-m="rgb" aria-pressed="false">RGB</button>
           <button data-m="cmyk" aria-pressed="false">CMYK</button>
           <button data-m="vec3" aria-pressed="false">vec3</button>
+        </div>
+      </span>
+      <span class="grp"><span class="lbl">Grade</span>
+        <div class="seg multi" id="gradeFilter" role="group" aria-label="Filter by WCAG contrast grade">
+          <button data-g="aaa" aria-pressed="false" title="AAA — 7:1 or better">AAA</button>
+          <button data-g="aa" aria-pressed="false" title="AA — 4.5:1 or better">AA</button>
+          <button data-g="aal" aria-pressed="false" title="AA Large — 3:1 or better">AA Large</button>
+          <button data-g="fail" aria-pressed="false" title="Fail — below 3:1">Fail</button>
         </div>
       </span>
       <select id="book" aria-label="Filter by swatch book">
@@ -746,7 +757,7 @@ html{scroll-behavior:auto}}
   var q=document.getElementById('q'), book=document.getElementById('book');
   var sortSel=document.getElementById('sort');
   var count=document.getElementById('count'), empty=document.getElementById('empty');
-  var countFilter='all', mode='hex';
+  var countFilter='all', mode='hex', gradeFilter=[];
 
   var ICON='<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" '+
     'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+
@@ -780,6 +791,7 @@ html{scroll-behavior:auto}}
       var ok=true;
       if(countFilter!=='all' && c.dataset.count!==countFilter) ok=false;
       if(ok && bk!=='all' && c.dataset.books.indexOf(bk)===-1) ok=false;
+      if(ok && gradeFilter.length && gradeFilter.indexOf(c.dataset.grade)===-1) ok=false;
       if(ok && term && c.dataset.search.indexOf(term)===-1) ok=false;
       c.style.display= ok ? '' : 'none';
       if(ok) shown++;
@@ -808,6 +820,7 @@ html{scroll-behavior:auto}}
       var p=new URLSearchParams();
       if(q.value.trim()) p.set('q', q.value.trim());
       if(countFilter!=='all') p.set('c', countFilter);
+      if(gradeFilter.length) p.set('grade', gradeFilter.join(','));
       if(book.value!=='all') p.set('book', book.value);
       if(mode!=='hex') p.set('mode', mode);
       if(sortSel.value!=='num') p.set('sort', sortSel.value);
@@ -823,6 +836,11 @@ html{scroll-behavior:auto}}
       document.querySelectorAll('#countFilter button').forEach(function(b){
         b.setAttribute('aria-pressed', b.dataset.c===countFilter); }); }
     if(p.get('book')) book.value=p.get('book');
+    if(p.get('grade')){
+      gradeFilter=p.get('grade').split(',').filter(function(g){ return g; });
+      document.querySelectorAll('#gradeFilter button').forEach(function(b){
+        b.setAttribute('aria-pressed', String(gradeFilter.indexOf(b.dataset.g)!==-1)); });
+    }
     if(p.get('mode')){ mode=p.get('mode');
       document.querySelectorAll('#modeFilter button').forEach(function(b){
         b.setAttribute('aria-pressed', b.dataset.m===mode); });
@@ -850,6 +868,14 @@ html{scroll-behavior:auto}}
       v.textContent=v.dataset[mode]; v.dataset.copy=v.dataset[mode];
     });
     syncUrl();
+  });
+
+  document.getElementById('gradeFilter').addEventListener('click', function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    var g=b.dataset.g, i=gradeFilter.indexOf(g);
+    if(i===-1) gradeFilter.push(g); else gradeFilter.splice(i,1);
+    b.setAttribute('aria-pressed', String(i===-1));
+    apply();
   });
 
   // ---- toast ----
@@ -988,6 +1014,7 @@ html{scroll-behavior:auto}}
   ctData.forEach(function(d){
     var card=byId[d.id]; if(!card) return;
     var g=grade(d.min);
+    card.dataset.grade=g.k;
 
     var badge=document.createElement('span');
     badge.className='ct-badge '+g.k;
