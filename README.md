@@ -10,7 +10,7 @@ An interactive, searchable web edition of all **348 colour combinations** and **
 
 Other editions of this dataset present the colours. This one also tells you whether you can actually use them:
 
-- **WCAG contrast grading on every combination** — each card carries its minimum contrast ratio, graded AAA / AA / AA Large / Low, with the full pairwise breakdown one click away. Every pair is also previewed in both directions as text-on-background, and every colour is checked against black and white, so you can see for yourself which text colour actually works. Filter the whole grid by grade, multi-select.
+- **WCAG contrast grading on every combination** — each card carries its minimum contrast ratio, graded AAA / AA / AA Large / Low. A **Details** panel opens the full breakdown in a focused modal: the palette, every pair previewed in both directions as text-on-background, and every colour checked against black and white. Filter the whole grid by grade, multi-select.
 - **Export from any swatch** — every combination exports directly to CSS variables, JSON, Tailwind, Adobe `.ase`, Photoshop `.aco`, GIMP `.gpl` or Figma Tokens Studio, scoped to just that swatch or to your current filters.
 - **A palette drawn from the book itself** — the interface is coloured with Wada's own Nile Blue, Deep Indigo and Dark Tyrian Blue, with every text pairing verified at AA or better.
 
@@ -28,7 +28,8 @@ Other editions of this dataset present the colours. This one also tells you whet
 - Export the current selection as CSS variables, JSON, or a Tailwind colour map
 - Export any single combination from its own card — the same copy and download formats, scoped to just that swatch
 - Download swatch files: Adobe `.ase`, Photoshop `.aco`, GIMP/Inkscape `.gpl`, and Figma Tokens Studio JSON
-- WCAG contrast checker — every combination carries its minimum contrast grade, with the full pairwise breakdown inside each card, graded AAA / AA / AA Large / Low
+- WCAG contrast checker — every combination carries its minimum contrast grade, graded AAA / AA / AA Large / Low
+- Details panel — a **Details** button on each card opens a focused modal with the palette, the full contrast breakdown, and related combinations, so the grid stays compact and uniform instead of stretching to fit expanded content
 - Colour-on-colour text check — each pair is previewed in both directions (A as text on B, and B as text on A) with real body and large-text samples rendered in the actual colours, alongside a verdict of AAA body / AA body / AA large / Not usable, so you can see at a glance whether a combination works as a text/background pairing rather than only against black or white
 - Black and white check — every colour in a combination is also previewed against both black and white text, with the better of the two called out, so you can tell whether a colour needs light or dark text on it
 - Filter by contrast grade, multi-select — combine AAA, AA, AA Large and Low to narrow the grid

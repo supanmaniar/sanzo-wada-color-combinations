@@ -253,9 +253,43 @@ color:var(--fg);font-family:inherit;font-size:.82rem;padding:.4rem .5rem;border-
 cursor:pointer;transition:background-color .15s var(--ease)}
 #cardMenu button:hover,#cardMenu button:focus-visible{background:var(--hover);outline:none}
 #cardMenu .cm-sep{height:1px;background:var(--border);margin:5px 2px}
+#comboModal{width:min(760px,calc(100vw - 2rem));max-height:min(88vh,940px);padding:0;
+border:1px solid var(--border);border-radius:var(--r-xl);background:var(--card);color:var(--fg);
+box-shadow:var(--shadow-hover);overflow:auto;overscroll-behavior:contain}
+#comboModal::backdrop{background:rgba(5,18,48,.5);backdrop-filter:blur(3px)}
+.cm-bar{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:8px;
+padding:14px 18px;background:var(--card);border-bottom:1px solid var(--border)}
+.cm-bar .cid{font-weight:700;font-size:1rem}
+.cm-bar .cnt,.cm-bar .bk-badge{font-size:.78rem;color:var(--muted)}
+.cm-close{margin-left:auto;background:transparent;border:1px solid var(--border);color:var(--muted);
+border-radius:var(--r-sm);cursor:pointer;font-family:inherit;font-size:.9rem;line-height:1;
+padding:.3rem .5rem;transition:background-color .15s var(--ease),color .15s var(--ease)}
+.cm-close:hover{background:var(--hover);color:var(--fg)}
+.cm-body{padding:18px}
+.cm-body h3{font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);
+font-weight:600;margin:22px 0 10px;padding-top:16px;border-top:1px solid var(--border)}
+.cm-body h3:first-child{margin-top:0;padding-top:0;border-top:0}
+.cm-palette{display:flex;flex-direction:column;gap:8px}
+.cm-swatch-row{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:var(--r-md);
+border:1px solid var(--border)}
+.cm-swatch-row .dot{width:26px;height:26px;border-radius:7px;border:1px solid var(--chipborder);flex:0 0 auto}
+.cm-swatch-row .nm{font-weight:600;font-size:.86rem;flex:1;min-width:0;
+overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cm-swatch-row .vals{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.cm-swatch-row .val{font-size:.72rem}
+.cm-body .ct-preview{padding:9px 11px}
+.cm-body .ct-pv-body{font-size:.86rem}
+.cm-body .ct-pv-large{font-size:1.15rem}
+.cm-body .ct-dir{padding-left:0}
+.cm-body .ct-pair-head{font-size:.82rem}
+.cm-body .ct-ratio{min-width:52px}
+.cm-body .rel-groups{margin-top:0}
+.cm-body .rel a{font-size:.8rem}
 .section-head .ct-legend{margin-top:var(--s3);font-size:.78rem}
 .ct-detail .ct-pairs{padding-bottom:8px}
 .ct-detail .ct-pair{font-size:.78rem}
+.card.details-hidden > details{display:none}
+.cm-swatch-row .bk{font-size:.7rem;color:var(--muted);flex:0 0 auto}
 footer{max-width:var(--measure);margin:0 auto;padding:var(--s7) 1.5rem var(--s8);color:var(--muted);font-size:.8rem;
 border-top:1px solid var(--border);line-height:1.75}
 footer h2{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--fg);
@@ -372,7 +406,7 @@ html{scroll-behavior:auto}}
 <main>
   <div class="section-head">
     <h2 id="grid-h">Combinations</h2>
-    <p>Every combination, with its WCAG contrast grade. Expand a card for the full pairwise breakdown, with a live preview of each colour used as text on the other, plus every colour checked against black and white.</p>
+    <p>Every combination, with its WCAG contrast grade. Open <strong>Details</strong> on any card for the full breakdown in a focused panel &mdash; palette, colour-on-colour previews, black and white checks, and related combinations.</p>
     <p class="ct-legend">
       <span class="ct-pill aaa">AAA</span> 7:1+
       <span class="ct-pill aa">AA</span> 4.5:1+
@@ -760,6 +794,7 @@ html{scroll-behavior:auto}}
 <div id="preview" role="tooltip" aria-hidden="true"></div>
 
 <div id="cardMenu" role="menu" aria-hidden="true"></div>
+<dialog id="comboModal" aria-labelledby="cmTitle"></dialog>
 
 <footer>
   <h2>About this edition</h2>
@@ -815,6 +850,7 @@ html{scroll-behavior:auto}}
 
   // ---- group related combinations by the colour they share ----
   var byId={}; cards.forEach(function(c){ byId[c.id]=c; });
+  var relWrapById={};
 
   function cardColourNames(card){
     return Array.prototype.map.call(card.querySelectorAll('.colors li'), function(li){
@@ -862,6 +898,7 @@ html{scroll-behavior:auto}}
 
     rel.parentNode.replaceChild(wrap, rel);
     det.querySelector('summary').textContent='Related combinations ('+det.querySelectorAll('.rel a').length+')';
+    relWrapById[c.id]=wrap;
   });
 
   function apply(){
@@ -1115,29 +1152,11 @@ html{scroll-behavior:auto}}
   });
 
   // fold the contrast results into each swatch card
-  ctData.forEach(function(d){
-    var card=byId[d.id]; if(!card) return;
-    var g=grade(d.min);
-    card.dataset.grade=g.k;
+  var ctById={};
+  ctData.forEach(function(d){ ctById[d.id]=d; });
 
-    var badge=document.createElement('span');
-    badge.className='ct-badge '+g.k;
-    badge.textContent=g.t+' \u00b7 min '+d.min.toFixed(2)+':1';
-    badge.title='Lowest WCAG contrast ratio within this combination';
-    card.querySelector('.meta').appendChild(badge);
-
-    var exp=document.createElement('button');
-    exp.type='button'; exp.className='card-export';
-    exp.setAttribute('aria-haspopup','true'); exp.setAttribute('aria-expanded','false');
-    exp.title='Export this combination';
-    exp.innerHTML=ICON+'<span>Export</span>';
-    exp.addEventListener('click', function(e){
-      e.stopPropagation();
-      if(cmCard===card) closeCardMenu(); else openCardMenu(exp, card);
-    });
-    card.querySelector('.meta').appendChild(exp);
-
-    var rows=d.pairs.map(function(p){
+  function pairRowsHTML(d){
+    return d.pairs.map(function(p){
       var pg=grade(p.ratio);
       var dirs=[[p.a,p.b],[p.b,p.a]].map(function(dr){
         var v=textVerdict(p.ratio);
@@ -1159,10 +1178,12 @@ html{scroll-behavior:auto}}
         '<span class="ct-badge '+pg.k+'">'+pg.t+'</span></div>'+
         '<div class="ct-dir">'+dirs+'</div></div>';
     }).join('');
+  }
 
-    // black and white are the universal text colours, so check every colour
-    // in the combination against both, regardless of what else is in it
-    var bwRows=d.cols.map(function(col){
+  // black and white are the universal text colours, so check every colour
+  // in the combination against both, regardless of what else is in it
+  function bwRowsHTML(d){
+    return d.cols.map(function(col){
       var opts=textOn(col.hex);
       var best=opts[0].ratio>=opts[1].ratio ? opts[0] : opts[1];
       var inner=opts.map(function(o){
@@ -1183,14 +1204,43 @@ html{scroll-behavior:auto}}
         '<span class="ct-badge '+grade(best.ratio).k+'">best: '+best.name+'</span></div>'+
         '<div class="ct-dir">'+inner+'</div></div>';
     }).join('');
+  }
 
-    var det=document.createElement('details');
-    det.className='ct-detail';
-    det.innerHTML='<summary>Contrast ('+d.pairs.length+' pair'+(d.pairs.length===1?'':'s')+')</summary>'+
-      '<div class="ct-pairs">'+rows+'</div>'+
-      '<div class="ct-subhead">Against black &amp; white</div>'+
-      '<div class="ct-pairs">'+bwRows+'</div>';
-    card.appendChild(det);
+  ctData.forEach(function(d){
+    var card=byId[d.id]; if(!card) return;
+    var g=grade(d.min);
+    card.dataset.grade=g.k;
+
+    var badge=document.createElement('span');
+    badge.className='ct-badge '+g.k;
+    badge.textContent=g.t+' \u00b7 min '+d.min.toFixed(2)+':1';
+    badge.title='Lowest WCAG contrast ratio within this combination';
+    card.querySelector('.meta').appendChild(badge);
+
+    var det=document.createElement('button');
+    det.type='button'; det.className='card-export card-details';
+    det.title='Open full details for this combination';
+    det.innerHTML='<span>Details</span>';
+    det.addEventListener('click', function(e){
+      e.stopPropagation();
+      openComboModal(card);
+    });
+    card.querySelector('.meta').appendChild(det);
+
+    var exp=document.createElement('button');
+    exp.type='button'; exp.className='card-export';
+    exp.setAttribute('aria-haspopup','true'); exp.setAttribute('aria-expanded','false');
+    exp.title='Export this combination';
+    exp.innerHTML=ICON+'<span>Export</span>';
+    exp.addEventListener('click', function(e){
+      e.stopPropagation();
+      if(cmCard===card) closeCardMenu(); else openCardMenu(exp, card);
+    });
+    card.querySelector('.meta').appendChild(exp);
+
+    // the deep-dive content now lives in the modal; hide the inline
+    // disclosures with a class so the no-JS fallback keeps them
+    card.classList.add('details-hidden');
   });
 
   // ---- swatch file export ----
@@ -1351,6 +1401,87 @@ html{scroll-behavior:auto}}
   document.addEventListener('keydown', function(e){ if(e.key==='Escape' && cmCard) closeCardMenu(); });
   window.addEventListener('scroll', function(){ if(cmCard) placeCardMenu(); }, {passive:true});
   window.addEventListener('resize', function(){ if(cmCard) placeCardMenu(); });
+
+  // ---- combination details modal ----
+  var modal=document.getElementById('comboModal'), modalCard=null;
+
+  function paletteHTML(card){
+    var rows='';
+    card.querySelectorAll('.colors li').forEach(function(li){
+      var hex=li.querySelector('.val').dataset.hex;
+      var nm=li.querySelector('.nm').textContent;
+      var bk=li.querySelector('.bk').textContent;
+      var vals='';
+      li.querySelectorAll('.val').forEach(function(v){ vals+=v.outerHTML; });
+      rows+='<div class="cm-swatch-row">'+
+        '<span class="dot" style="background:'+hex+'"></span>'+
+        '<span class="nm">'+esc(nm)+'</span>'+
+        '<span class="bk">'+esc(bk)+'</span>'+
+        '<span class="vals">'+vals+'</span></div>';
+    });
+    return '<div class="cm-palette">'+rows+'</div>';
+  }
+
+  function openComboModal(card){
+    var d=ctById[card.id]; if(!d) return;
+    modalCard=card;
+    var g=grade(d.min);
+    var n=d.cols.length;
+    var rel=relWrapById[card.id];
+    var relCount=rel ? rel.querySelectorAll('a').length : 0;
+
+    modal.innerHTML=
+      '<div class="cm-bar">'+
+        '<span class="cid" id="cmTitle">#'+esc(card.dataset.num)+'</span>'+
+        '<span class="cnt">'+n+' colour'+(n===1?'':'s')+'</span>'+
+        '<span class="bk-badge">Books '+esc(card.dataset.books.split('').join(','))+'</span>'+
+        '<span class="ct-badge '+g.k+'">'+g.t+' \u00b7 min '+d.min.toFixed(2)+':1</span>'+
+        '<button type="button" class="cm-close" aria-label="Close details">\u2715</button>'+
+      '</div>'+
+      '<div class="cm-body">'+
+        '<h3>Palette</h3>'+paletteHTML(card)+
+        '<h3>Colour on colour</h3>'+
+        '<div class="ct-pairs">'+pairRowsHTML(d)+'</div>'+
+        '<h3>Against black &amp; white</h3>'+
+        '<div class="ct-pairs">'+bwRowsHTML(d)+'</div>'+
+        (relCount ? '<h3>Related combinations ('+relCount+')</h3>'+rel.outerHTML : '')+
+      '</div>';
+
+    if(!modal.open){
+      if(typeof modal.showModal==='function') modal.showModal();
+      else modal.setAttribute('open','');
+    }
+    modal.scrollTop=0;
+    var closeBtn=modal.querySelector('.cm-close');
+    if(closeBtn) closeBtn.focus();
+  }
+
+  function closeComboModal(){
+    if(typeof modal.close==='function' && modal.open) modal.close();
+    else modal.removeAttribute('open');
+    modalCard=null;
+  }
+
+  modal.addEventListener('click', function(e){
+    if(e.target.closest('.cm-close')){ closeComboModal(); return; }
+    // clicking the backdrop (outside the dialog box) closes it
+    if(e.target===modal){ closeComboModal(); return; }
+    // a related link inside the modal swaps the modal to that combination
+    var a=e.target.closest('.rel a');
+    if(a){
+      e.preventDefault();
+      var other=byId[a.getAttribute('href').slice(1)];
+      if(other) openComboModal(other);
+    }
+  });
+
+  modal.addEventListener('close', function(){ modalCard=null; });
+
+  // explicit Escape handling: the native cancel-to-close is not reliable
+  // across browsers once focus has moved inside the dialog
+  modal.addEventListener('keydown', function(e){
+    if(e.key==='Escape'){ e.preventDefault(); closeComboModal(); }
+  });
 
   // ---- mobile filter disclosure ----
   var tinFilters=document.getElementById('tinFilters'), fb=document.getElementById('filters');
