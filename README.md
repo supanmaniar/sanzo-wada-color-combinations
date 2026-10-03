@@ -29,7 +29,7 @@ Other editions of this dataset present the colours. This one also tells you whet
 - Export any single combination from its own card — the same copy and download formats, scoped to just that swatch
 - Download swatch files: Adobe `.ase`, Photoshop `.aco`, GIMP/Inkscape `.gpl`, and Figma Tokens Studio JSON
 - WCAG contrast checker — every combination carries its minimum contrast grade, graded AAA / AA / AA Large / Low
-- Details panel — a **Details** button on each card opens a focused modal with the palette, the full contrast breakdown, and related combinations, so the grid stays compact and uniform instead of stretching to fit expanded content
+- Details panel — a **Details** button on each card opens a focused modal with the palette, the full contrast breakdown, and related combinations, so the grid stays compact and uniform instead of stretching to fit expanded content. The modal carries its own **Export** button, so you can export a combination without leaving it
 - Colour-on-colour text check — each pair is previewed in both directions (A as text on B, and B as text on A) with real body and large-text samples rendered in the actual colours, alongside a verdict of AAA body / AA body / AA large / Not usable, so you can see at a glance whether a combination works as a text/background pairing rather than only against black or white
 - Black and white check — every colour in a combination is also previewed against both black and white text, with the better of the two called out, so you can tell whether a colour needs light or dark text on it
 - Filter by contrast grade, multi-select — combine AAA, AA, AA Large and Low to narrow the grid
