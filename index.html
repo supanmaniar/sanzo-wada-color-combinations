@@ -207,11 +207,21 @@ html[data-theme=dark] .ct-pill.aaa{color:#5ee07a}
 html[data-theme=dark] .ct-pill.aa{color:#6cb6ff}
 html[data-theme=dark] .ct-pill.aal{color:#ffc061}
 html[data-theme=dark] .ct-pill.fail{color:#8fb4bf}
-.ct-pairs{display:flex;flex-direction:column;gap:4px}
-.ct-pair{display:flex;align-items:center;gap:7px}
+.ct-pairs{display:flex;flex-direction:column;gap:9px}
+.ct-pair{display:flex;flex-direction:column;gap:3px}
+.ct-pair-head{display:flex;align-items:center;gap:7px}
 .ct-swatch{width:26px;height:16px;border-radius:4px;border:1px solid var(--chipborder);
 display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:700;flex:0 0 auto}
 .ct-ratio{font-variant-numeric:tabular-nums;color:var(--muted);min-width:44px}
+.ct-dir{display:flex;flex-direction:column;gap:7px;padding-left:33px}
+.ct-dir-block{display:flex;flex-direction:column;gap:3px}
+.ct-dir-row{display:flex;align-items:center;gap:6px;font-size:.72rem;color:var(--muted)}
+.ct-dir-tag{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ct-dir-row .ct-badge{margin-left:0;flex:0 0 auto}
+.ct-preview{border-radius:var(--r-sm);border:1px solid var(--chipborder);padding:6px 8px;
+display:flex;flex-direction:column;gap:3px;overflow:hidden}
+.ct-pv-body{font-size:.78rem;line-height:1.3}
+.ct-pv-large{font-size:1.05rem;font-weight:700;line-height:1.25}
 .ct-badge{border-radius:var(--r-pill);padding:.05rem .4rem;font-size:.65rem;font-weight:600;
 border:1px solid var(--border);margin-left:auto}
 .ct-badge.aaa{background:rgba(15,92,38,.16);color:#0d5222}
@@ -360,7 +370,7 @@ html{scroll-behavior:auto}}
 <main>
   <div class="section-head">
     <h2 id="grid-h">Combinations</h2>
-    <p>Every combination, with its WCAG contrast grade. Expand a card for the full pairwise breakdown.</p>
+    <p>Every combination, with its WCAG contrast grade. Expand a card for the full pairwise breakdown, with a live preview of each colour used as text on the other.</p>
     <p class="ct-legend">
       <span class="ct-pill aaa">AAA</span> 7:1+
       <span class="ct-pill aa">AA</span> 4.5:1+
@@ -1066,6 +1076,17 @@ html{scroll-behavior:auto}}
     var w=contrast(hex,'#ffffff'), b=contrast(hex,'#000000');
     return w>=b ? {hex:'#ffffff', ratio:w} : {hex:'#000000', ratio:b};
   }
+  function esc(s){
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  // WCAG 1.4.3/1.4.6: body text needs 4.5:1 (AA) / 7:1 (AAA);
+  // large text (>=18.66px bold or >=24px) needs 3:1 (AA) / 4.5:1 (AAA).
+  function textVerdict(r){
+    if(r>=7) return {k:'aaa', t:'AAA body'};
+    if(r>=4.5) return {k:'aa', t:'AA body'};
+    if(r>=3) return {k:'aal', t:'AA large'};
+    return {k:'fail', t:'Not usable'};
+  }
 
   var ctData=[];
   cards.forEach(function(c){
@@ -1111,11 +1132,25 @@ html{scroll-behavior:auto}}
 
     var rows=d.pairs.map(function(p){
       var pg=grade(p.ratio);
+      var dirs=[[p.a,p.b],[p.b,p.a]].map(function(dr){
+        var v=textVerdict(p.ratio);
+        var bg=dr[0].hex, fg=dr[1].hex;
+        return '<div class="ct-dir-block">'+
+          '<div class="ct-dir-row">'+
+          '<span class="ct-dir-tag">'+esc(dr[1].name)+' on '+esc(dr[0].name)+'</span>'+
+          '<span class="ct-badge '+v.k+'">'+v.t+'</span></div>'+
+          '<div class="ct-preview" style="background:'+bg+';color:'+fg+'">'+
+          '<span class="ct-pv-body">The quick brown fox jumps over the lazy dog</span>'+
+          '<span class="ct-pv-large">Large text sample</span>'+
+          '</div></div>';
+      }).join('');
       return '<div class="ct-pair">'+
+        '<div class="ct-pair-head">'+
         '<span class="ct-swatch" style="background:'+p.a.hex+';color:'+bestTextOn(p.a.hex).hex+'">A</span>'+
         '<span class="ct-swatch" style="background:'+p.b.hex+';color:'+bestTextOn(p.b.hex).hex+'">A</span>'+
         '<span class="ct-ratio">'+p.ratio.toFixed(2)+':1</span>'+
-        '<span class="ct-badge '+pg.k+'">'+pg.t+'</span></div>';
+        '<span class="ct-badge '+pg.k+'">'+pg.t+'</span></div>'+
+        '<div class="ct-dir">'+dirs+'</div></div>';
     }).join('');
 
     var det=document.createElement('details');
