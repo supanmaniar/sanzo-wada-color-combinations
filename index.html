@@ -156,6 +156,10 @@ border-radius:16px;padding:14px;box-shadow:var(--shadow-hover);visibility:hidden
 transform:translateY(6px) scale(.97);transform-origin:top center;pointer-events:none;
 transition:opacity .18s var(--ease),transform .18s var(--ease)}
 #preview.on{visibility:visible;opacity:1;transform:none;pointer-events:auto;cursor:pointer}
+/* a showModal() dialog paints in the top layer, above any z-index, so the
+   preview has to be promoted into that layer too when the modal is open */
+#preview.in-modal{position:fixed;inset:auto;margin:0;z-index:auto;
+border-radius:16px;padding:14px;max-width:none;max-height:none}
 .pv-chips{display:flex;gap:6px;height:52px;margin-bottom:10px}
 .pv-colors{list-style:none;margin:8px 0 0;padding:0;font-size:.8rem;
 display:flex;flex-direction:column;gap:4px}
@@ -1425,6 +1429,13 @@ html{scroll-behavior:auto}}
   function openComboModal(card){
     var d=ctById[card.id]; if(!d) return;
     modalCard=card;
+    // the preview may be parked inside the modal; move it out before the
+    // innerHTML swap below would destroy it
+    if(pv){
+      if(pv.parentNode===modal) document.body.appendChild(pv);
+      pv.classList.remove('in-modal');
+      hidePreview();
+    }
     var g=grade(d.min);
     var n=d.cols.length;
     var rel=relWrapById[card.id];
@@ -1475,7 +1486,14 @@ html{scroll-behavior:auto}}
     }
   });
 
-  modal.addEventListener('close', function(){ modalCard=null; });
+  modal.addEventListener('close', function(){
+    modalCard=null;
+    // return the preview to the document so it is not left inside a closed dialog
+    if(pv && pv.parentNode===modal){
+      document.body.appendChild(pv);
+      pv.classList.remove('in-modal');
+    }
+  });
 
   // explicit Escape handling: the native cancel-to-close is not reliable
   // across browsers once focus has moved inside the dialog
@@ -1545,6 +1563,11 @@ html{scroll-behavior:auto}}
     if(!card) return;
     pvCard=card; pvLink=link;
     pv.innerHTML=buildPreview(card);
+    // a showModal() dialog sits in the top layer, above any z-index, so the
+    // preview must live inside it to be visible over the modal
+    var host = modal.open ? modal : document.body;
+    if(pv.parentNode!==host) host.appendChild(pv);
+    pv.classList.toggle('in-modal', modal.open);
     pv.classList.add('on'); pv.setAttribute('aria-hidden','false');
     placePreview(link);
   }
@@ -1554,25 +1577,27 @@ html{scroll-behavior:auto}}
     pvCard=null; pvLink=null;
   }
 
-  grid.addEventListener('mouseover', function(e){
+  // related links live in the grid and in the details modal, so listen on
+  // the document rather than on the grid alone
+  document.addEventListener('mouseover', function(e){
     var a=e.target.closest('.rel a'); if(!a) return;
     clearTimeout(pvHide); clearTimeout(pvTimer);
     pvTimer=setTimeout(function(){ showPreview(a); }, 120);
   });
 
-  grid.addEventListener('mouseout', function(e){
+  document.addEventListener('mouseout', function(e){
     var a=e.target.closest('.rel a'); if(!a) return;
     clearTimeout(pvTimer);
     pvHide=setTimeout(hidePreview, 180);
   });
 
   // keyboard: show preview when a related link receives focus
-  grid.addEventListener('focusin', function(e){
+  document.addEventListener('focusin', function(e){
     var a=e.target.closest('.rel a'); if(!a) return;
     clearTimeout(pvHide); clearTimeout(pvTimer);
     showPreview(a);
   });
-  grid.addEventListener('focusout', function(e){
+  document.addEventListener('focusout', function(e){
     var a=e.target.closest('.rel a'); if(!a) return;
     clearTimeout(pvTimer);
     pvHide=setTimeout(hidePreview, 180);
@@ -1584,15 +1609,19 @@ html{scroll-behavior:auto}}
   pv.addEventListener('mouseenter', function(){ clearTimeout(pvHide); });
   pv.addEventListener('mouseleave', function(){ pvHide=setTimeout(hidePreview, 180); });
 
-  // clicking the preview jumps to the combination
+  // clicking the preview jumps to the combination, or swaps the modal when
+  // the preview was opened from inside it
   pv.addEventListener('click', function(){
     if(!pvCard) return;
-    var id=pvCard.id; hidePreview();
-    location.hash=''; location.hash=id;
+    var card=pvCard; hidePreview();
+    if(modal.open){ openComboModal(card); return; }
+    location.hash=''; location.hash=card.id;
   });
 
   window.addEventListener('scroll', function(){ if(pvLink) placePreview(pvLink); }, {passive:true});
   window.addEventListener('resize', function(){ if(pvLink) placePreview(pvLink); });
+  // the modal scrolls independently of the window
+  modal.addEventListener('scroll', function(){ if(pvLink) placePreview(pvLink); }, {passive:true});
 
   // theme
   var root=document.documentElement, tb=document.getElementById('theme');
