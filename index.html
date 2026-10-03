@@ -100,6 +100,17 @@ summary:hover{color:var(--fg)}
 padding:.1rem .5rem;font-size:.75rem;
 transition:background-color .2s var(--ease),transform .15s var(--ease)}
 .rel a:hover{background-color:var(--hover);transform:translateY(-1px)}
+#preview{position:fixed;z-index:60;width:264px;background:var(--card);border:1px solid var(--border);
+border-radius:16px;padding:14px;box-shadow:var(--shadow-hover);visibility:hidden;opacity:0;
+transform:translateY(6px) scale(.97);transform-origin:top center;pointer-events:none;
+transition:opacity .18s var(--ease),transform .18s var(--ease)}
+#preview.on{visibility:visible;opacity:1;transform:none;pointer-events:auto;cursor:pointer}
+.pv-chips{display:flex;gap:6px;height:52px;margin-bottom:10px}
+.pv-colors{list-style:none;margin:8px 0 0;padding:0;font-size:.8rem;
+display:flex;flex-direction:column;gap:4px}
+.pv-colors li{display:flex;align-items:center;gap:8px}
+.pv-hint{margin-top:10px;padding-top:8px;border-top:1px solid var(--border);
+font-size:.72rem;color:var(--muted);text-align:center}
 #empty{display:none;text-align:center;color:var(--muted);padding:4rem 1rem;font-size:1.05rem}
 footer{max-width:1320px;margin:0 auto;padding:3rem 1.5rem 5rem;color:var(--muted);font-size:.8rem;
 border-top:1px solid var(--border);line-height:1.75}
@@ -500,6 +511,8 @@ html{scroll-behavior:auto}}
   <p id="empty">No combinations match those filters.</p>
 </main>
 
+<div id="preview" role="tooltip" aria-hidden="true"></div>
+
 <footer>
   <p>Generated 2026-10-03 from the canonical <code>colors.json</code> in the public repository, which lists each colour&rsquo;s
   swatch book (the six chapters of the original publication) alongside its combinations.</p>
@@ -566,6 +579,76 @@ html{scroll-behavior:auto}}
       t.select(); try{document.execCommand('copy');}catch(err){} document.body.removeChild(t); done();
     }
   });
+
+  // hover preview for related combinations
+  var pv=document.getElementById('preview'), pvCard=null, pvLink=null, pvTimer=null, pvHide=null;
+  var byId={}; cards.forEach(function(c){ byId[c.id]=c; });
+
+  function buildPreview(card){
+    var chips=card.querySelector('.chips').innerHTML;
+    var meta=card.querySelector('.meta').innerHTML;
+    var rows='';
+    card.querySelectorAll('.colors li').forEach(function(li){
+      var dot=li.querySelector('.dot').outerHTML;
+      var nm=li.querySelector('.nm').textContent;
+      var bk=li.querySelector('.bk').textContent;
+      var v=li.querySelector('.val');
+      rows+='<li>'+dot+'<span class="nm">'+nm+'</span><span class="bk">'+bk+'</span>'+
+            '<span class="val">'+v.dataset[mode]+'</span></li>';
+    });
+    return '<div class="pv-chips">'+chips+'</div><div class="meta">'+meta+'</div>'+
+           '<ul class="pv-colors">'+rows+'</ul>'+
+           '<div class="pv-hint">Click to jump to this combination</div>';
+  }
+
+  function placePreview(link){
+    var r=link.getBoundingClientRect(), w=pv.offsetWidth, h=pv.offsetHeight, pad=10;
+    var left=r.left+r.width/2-w/2;
+    left=Math.max(pad, Math.min(left, window.innerWidth-w-pad));
+    var top=r.bottom+8;
+    if(top+h>window.innerHeight-pad) top=r.top-h-8;
+    top=Math.max(pad, top);
+    pv.style.left=left+'px'; pv.style.top=top+'px';
+  }
+
+  function showPreview(link){
+    var card=byId[link.getAttribute('href').slice(1)];
+    if(!card) return;
+    pvCard=card; pvLink=link;
+    pv.innerHTML=buildPreview(card);
+    pv.classList.add('on'); pv.setAttribute('aria-hidden','false');
+    placePreview(link);
+  }
+
+  function hidePreview(){
+    pv.classList.remove('on'); pv.setAttribute('aria-hidden','true');
+    pvCard=null; pvLink=null;
+  }
+
+  grid.addEventListener('mouseover', function(e){
+    var a=e.target.closest('.rel a'); if(!a) return;
+    clearTimeout(pvHide); clearTimeout(pvTimer);
+    pvTimer=setTimeout(function(){ showPreview(a); }, 120);
+  });
+
+  grid.addEventListener('mouseout', function(e){
+    var a=e.target.closest('.rel a'); if(!a) return;
+    clearTimeout(pvTimer);
+    pvHide=setTimeout(hidePreview, 180);
+  });
+
+  pv.addEventListener('mouseenter', function(){ clearTimeout(pvHide); });
+  pv.addEventListener('mouseleave', function(){ pvHide=setTimeout(hidePreview, 180); });
+
+  // clicking the preview jumps to the combination
+  pv.addEventListener('click', function(){
+    if(!pvCard) return;
+    var id=pvCard.id; hidePreview();
+    location.hash=''; location.hash=id;
+  });
+
+  window.addEventListener('scroll', function(){ if(pvLink) placePreview(pvLink); }, {passive:true});
+  window.addEventListener('resize', function(){ if(pvLink) placePreview(pvLink); });
 
   // theme
   var root=document.documentElement, tb=document.getElementById('theme');
