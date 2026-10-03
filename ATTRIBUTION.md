@@ -30,7 +30,10 @@ All colour names, combinations, and the underlying arrangement are the work of S
 
 ## This repository
 
-Maintained by [supanmaniar](https://github.com/supanmaniar). Changes are limited to packaging and publication (repository structure, GitHub Pages deployment, and documentation). The interactive site content is reproduced from the upstream sources above.
+Webpage designed and built by **[Supan Maniar](https://github.com/supanmaniar)** — including the Apple-inspired
+interface design, layout, typography, theming, and responsive behaviour.
+
+The colour data and the original interactive concept are reproduced from the upstream sources above.
 
 ## Licence
 

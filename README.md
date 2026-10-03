@@ -11,8 +11,9 @@ An interactive, searchable web edition of all **348 colour combinations** and **
 - All 348 combinations, filterable by number of colours (2, 3, or 4)
 - Full-text search across colour names, hex values, and combination numbers
 - Hex, RGB, CMYK, and vec3 value formats
-- Light and dark themes
+- Light and dark themes, following system preference
 - Related-combination links between palettes
+- Apple-inspired interface: SF-style typography, translucent sticky toolbar, soft depth and shadow, refined motion, and full `prefers-reduced-motion` support
 - Fully self-contained single HTML file — no build step, no external assets, works offline
 
 ## Contents
@@ -41,6 +42,7 @@ Colour names keep their source spellings, including historical forms such as *Ce
 
 This project is a presentation of data and code created by others. Full credit belongs to the original creators:
 
+- **Supan Maniar** — webpage design and build (this repository)
 - **Sanzo Wada** — original author of *A Dictionary of Color Combinations* (Seigensha, 2011; based on *Haishoku Soukan*, 1933–34)
 - **[Matt DesLauriers](https://github.com/mattdesl/dictionary-of-colour-combinations)** — colour dataset (MIT)
 - **[Dain M. Blodorn Kim](https://github.com/dblodorn/sanzo-wada)** — compilation of the dataset (MIT)

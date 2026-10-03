@@ -6,66 +6,116 @@
 <title>Sanzo Wada &mdash; A Dictionary of Color Combinations</title>
 <meta name="description" content="All 348 colour combinations from Sanzo Wada's A Dictionary of Color Combinations, with Hex, RGB, CMYK and vec3 values.">
 <style>
-:root{--bg:#fff;--fg:#1a1a1a;--muted:#6b7280;--card:#fff;--border:#e5e7eb;--accent:#12354e;
---chipborder:rgba(0,0,0,.16);--toolbar:rgba(255,255,255,.88);--hover:#f3f4f6}
-html[data-theme=dark]{--bg:#14161a;--fg:#e8eaed;--muted:#9aa0a6;--card:#1b1e23;--border:#2c313a;
---accent:#8ab4d8;--chipborder:rgba(255,255,255,.24);--toolbar:rgba(20,22,26,.9);--hover:#242830}
+:root{
+--bg:#f5f5f7;--fg:#1d1d1f;--muted:#6e6e73;--card:#fff;--border:rgba(0,0,0,.08);
+--accent:#0071e3;--chipborder:rgba(0,0,0,.12);--toolbar:rgba(251,251,253,.72);
+--hover:rgba(0,0,0,.045);--seg:rgba(118,118,128,.12);--segactive:#fff;
+--shadow:0 1px 2px rgba(0,0,0,.04),0 6px 20px rgba(0,0,0,.06);
+--shadow-hover:0 2px 4px rgba(0,0,0,.05),0 14px 36px rgba(0,0,0,.11);
+--ease:cubic-bezier(.25,.1,.25,1)}
+html[data-theme=dark]{
+--bg:#000;--fg:#f5f5f7;--muted:#86868b;--card:#1d1d1f;--border:rgba(255,255,255,.1);
+--accent:#2997ff;--chipborder:rgba(255,255,255,.18);--toolbar:rgba(22,22,23,.72);
+--hover:rgba(255,255,255,.07);--seg:rgba(118,118,128,.24);--segactive:#48484a;
+--shadow:0 1px 2px rgba(0,0,0,.5),0 6px 20px rgba(0,0,0,.45);
+--shadow-hover:0 2px 6px rgba(0,0,0,.55),0 16px 40px rgba(0,0,0,.6)}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--fg);line-height:1.6;
-font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
-header{padding:2.5rem 1.25rem 1rem;max-width:1280px;margin:0 auto}
-h1{margin:0 0 .35rem;font-size:clamp(1.5rem,3.4vw,2.3rem);letter-spacing:-.02em}
-.sub{color:var(--muted);margin:0 0 1rem;font-size:.95rem}
-.credits{color:var(--muted);font-size:.82rem;margin:0}
-.credits a{color:var(--accent)}
-.toolbar{position:sticky;top:0;z-index:10;background:var(--toolbar);backdrop-filter:blur(10px);
-border-bottom:1px solid var(--border);padding:.7rem 1.25rem}
-.tin{max-width:1280px;margin:0 auto;display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
-input[type=search],select{background:var(--card);color:var(--fg);border:1px solid var(--border);
-border-radius:8px;padding:.45rem .65rem;font-size:.9rem;font-family:inherit}
-input[type=search]{flex:1 1 220px;min-width:160px}
-.seg{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden}
-.seg button{background:var(--card);color:var(--fg);border:0;padding:.45rem .7rem;cursor:pointer;
-font-size:.85rem;font-family:inherit;border-right:1px solid var(--border)}
-.seg button:last-child{border-right:0}
-.seg button[aria-pressed=true]{background:var(--accent);color:#fff}
-html[data-theme=dark] .seg button[aria-pressed=true]{color:#111}
-.lbl{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
-#count{color:var(--muted);font-size:.85rem;margin-left:auto}
-main{max-width:1280px;margin:0 auto;padding:1.25rem}
-.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
-.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;
-display:flex;flex-direction:column;gap:9px}
-.chips{display:flex;gap:4px;height:54px}
-.chip{flex:1;border-radius:7px;border:1px solid var(--chipborder)}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);line-height:1.5;
+font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Helvetica Neue',Helvetica,Arial,sans-serif;
+-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;letter-spacing:-.01em}
+body::before{content:'';position:fixed;inset:0 0 auto;height:460px;pointer-events:none;z-index:-1;
+background:radial-gradient(120% 100% at 50% 0%,rgba(0,113,227,.07),transparent 70%)}
+html[data-theme=dark] body::before{background:radial-gradient(120% 100% at 50% 0%,rgba(41,151,255,.12),transparent 70%)}
+::selection{background:rgba(0,113,227,.22)}
+header{padding:4.5rem 1.5rem 2rem;max-width:1320px;margin:0 auto}
+h1{margin:0 0 .6rem;font-size:clamp(2rem,5vw,3.25rem);font-weight:700;letter-spacing:-.03em;line-height:1.08}
+.sub{color:var(--muted);margin:0 0 1.25rem;font-size:clamp(.95rem,1.6vw,1.15rem);letter-spacing:-.01em}
+.credits{color:var(--muted);font-size:.8rem;margin:0;line-height:1.75;max-width:74ch}
+.credits a{color:var(--accent);text-decoration:none}
+.credits a:hover{text-decoration:underline}
+.byline{color:var(--fg);font-weight:600}
+.toolbar{position:sticky;top:0;z-index:20;background:var(--toolbar);
+-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);
+border-bottom:1px solid var(--border);padding:.75rem 1.5rem}
+.tin{max-width:1320px;margin:0 auto;display:flex;flex-wrap:wrap;gap:.6rem;align-items:center}
+input[type=search],select{background-color:var(--seg);color:var(--fg);border:1px solid transparent;
+border-radius:10px;padding:.5rem .8rem;font-size:.9rem;font-family:inherit;
+transition:background-color .2s var(--ease),box-shadow .2s var(--ease),border-color .2s var(--ease)}
+input[type=search]{flex:1 1 240px;min-width:170px}
+input[type=search]::placeholder{color:var(--muted)}
+input[type=search]:focus,select:focus{outline:none;background-color:var(--card);
+border-color:var(--accent);box-shadow:0 0 0 4px rgba(0,113,227,.18)}
+select{-webkit-appearance:none;appearance:none;padding-right:2rem;cursor:pointer;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%236e6e73' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+background-repeat:no-repeat;background-position:right .7rem center}
+html[data-theme=dark] select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%2386868b' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+.seg{display:flex;background:var(--seg);border-radius:10px;padding:2px;gap:2px}
+.seg button{background:transparent;color:var(--fg);border:0;padding:.4rem .75rem;cursor:pointer;
+font-size:.85rem;font-family:inherit;font-weight:500;border-radius:8px;
+transition:background-color .2s var(--ease),box-shadow .2s var(--ease),font-weight .2s var(--ease)}
+.seg button:hover{background:var(--hover)}
+.seg button[aria-pressed=true]{background:var(--segactive);font-weight:600;
+box-shadow:0 1px 3px rgba(0,0,0,.12),0 1px 1px rgba(0,0,0,.06)}
+.btn{background-color:var(--seg);color:var(--fg);border:0;border-radius:10px;padding:.5rem .85rem;
+font-size:.85rem;font-family:inherit;font-weight:500;cursor:pointer;
+transition:background-color .2s var(--ease),transform .15s var(--ease)}
+.btn:hover{background-color:var(--hover)}
+.btn:active{transform:scale(.96)}
+.lbl{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+#count{color:var(--muted);font-size:.82rem;margin-left:auto;font-variant-numeric:tabular-nums}
+main{max-width:1320px;margin:0 auto;padding:2rem 1.5rem 1rem}
+.grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));
+animation:fade .6s var(--ease) both}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:16px;
+display:flex;flex-direction:column;gap:12px;box-shadow:var(--shadow);
+transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover)}
+.chips{display:flex;gap:6px;height:64px}
+.chip{flex:1;border-radius:12px;border:1px solid var(--chipborder)}
 .meta{display:flex;gap:8px;align-items:center;font-size:.78rem;color:var(--muted);flex-wrap:wrap}
-.cid{font-weight:700;color:var(--fg);font-size:.9rem}
-.bk-badge{border:1px solid var(--border);border-radius:999px;padding:0 .5rem}
-.colors{list-style:none;margin:0;padding:0;font-size:.82rem;display:flex;flex-direction:column;gap:3px}
-.colors li{display:flex;align-items:center;gap:6px}
-.dot{width:11px;height:11px;border-radius:3px;border:1px solid var(--chipborder);flex:0 0 auto}
+.cid{font-weight:600;color:var(--fg);font-size:.95rem;letter-spacing:-.01em}
+.bk-badge{border:1px solid var(--border);border-radius:999px;padding:.1rem .55rem;font-size:.72rem}
+.colors{list-style:none;margin:0;padding:0;font-size:.82rem;display:flex;flex-direction:column;gap:5px}
+.colors li{display:flex;align-items:center;gap:8px}
+.dot{width:12px;height:12px;border-radius:4px;border:1px solid var(--chipborder);flex:0 0 auto}
 .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .bk{color:var(--muted);font-size:.72rem}
-.val{background:transparent;border:0;color:var(--muted);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-font-size:.76rem;cursor:pointer;padding:1px 3px;border-radius:4px}
-.val:hover{background:var(--hover);color:var(--fg)}
-details{border-top:1px solid var(--border);padding-top:6px;font-size:.8rem}
-summary{cursor:pointer;color:var(--muted)}
-.rel{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
-.rel a{color:var(--accent);text-decoration:none;border:1px solid var(--border);border-radius:6px;padding:0 5px}
-.rel a:hover{background:var(--hover)}
-#empty{display:none;text-align:center;color:var(--muted);padding:3rem 1rem}
-footer{max-width:1280px;margin:0 auto;padding:2rem 1.25rem 3.5rem;color:var(--muted);font-size:.82rem;
-border-top:1px solid var(--border)}
-footer a{color:var(--accent)}
-:target .cnt{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+.val{background:transparent;border:0;color:var(--muted);
+font-family:ui-monospace,SFMono-Regular,'SF Mono',Menlo,monospace;
+font-size:.75rem;cursor:pointer;padding:2px 6px;border-radius:6px;
+transition:background-color .2s var(--ease),color .2s var(--ease)}
+.val:hover{background-color:var(--hover);color:var(--fg)}
+details{border-top:1px solid var(--border);padding-top:8px;font-size:.8rem}
+summary{cursor:pointer;color:var(--muted);list-style:none;
+transition:color .2s var(--ease)}
+summary::-webkit-details-marker{display:none}
+summary::before{content:'\25B8';display:inline-block;margin-right:.4rem;
+transition:transform .2s var(--ease)}
+details[open] summary::before{transform:rotate(90deg)}
+summary:hover{color:var(--fg)}
+.rel{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.rel a{color:var(--accent);text-decoration:none;border:1px solid var(--border);border-radius:8px;
+padding:.1rem .5rem;font-size:.75rem;
+transition:background-color .2s var(--ease),transform .15s var(--ease)}
+.rel a:hover{background-color:var(--hover);transform:translateY(-1px)}
+#empty{display:none;text-align:center;color:var(--muted);padding:4rem 1rem;font-size:1.05rem}
+footer{max-width:1320px;margin:0 auto;padding:3rem 1.5rem 5rem;color:var(--muted);font-size:.8rem;
+border-top:1px solid var(--border);line-height:1.75}
+footer a{color:var(--accent);text-decoration:none}
+footer a:hover{text-decoration:underline}
+:target .cnt{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+@media (prefers-reduced-motion:reduce){
+*{transition:none!important;animation:none!important}
+html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
 <header>
   <h1>Sanzo Wada &mdash; A Dictionary of Color Combinations</h1>
   <p class="sub">All <strong>348</strong> combinations &middot; <strong>159</strong> named colours &middot; <strong>1032</strong> swatches. Values in Hex, RGB, CMYK and vec3.</p>
-  <p class="credits">Colour data: <a href="https://github.com/mattdesl/dictionary-of-colour-combinations">Matt DesLauriers</a> (MIT), from a compilation by <a href="https://github.com/dblodorn/sanzo-wada">Dain M. Blodorn Kim</a>. Book: <em>A Dictionary of Color Combinations</em> by Sanzo Wada (Seigensha). Interactive site by <a href="https://github.com/bravokiloecho/color-combinations-sanzo-wada-public">ben elwyn</a>.</p>
+  <p class="credits">Webpage by <a class="byline" href="https://github.com/supanmaniar">Supan Maniar</a>. Colour data: <a href="https://github.com/mattdesl/dictionary-of-colour-combinations">Matt DesLauriers</a> (MIT), from a compilation by <a href="https://github.com/dblodorn/sanzo-wada">Dain M. Blodorn Kim</a>. Book: <em>A Dictionary of Color Combinations</em> by Sanzo Wada (Seigensha). Original interactive site by <a href="https://github.com/bravokiloecho/color-combinations-sanzo-wada-public">ben elwyn</a>.</p>
 </header>
 
 <div class="toolbar">
@@ -91,7 +141,7 @@ footer a{color:var(--accent)}
       <option value="C">Book C</option><option value="D">Book D</option>
       <option value="E">Book E</option><option value="F">Book F</option>
     </select>
-    <button id="theme" class="val" style="border:1px solid var(--border);padding:.45rem .7rem;font-family:inherit">Dark</button>
+    <button id="theme" class="btn">Dark</button>
     <span id="count" aria-live="polite"></span>
   </div>
 </div>
@@ -456,6 +506,11 @@ footer a{color:var(--accent)}
   <p>Colour values are reproduced as published in that dataset. CMYK values are the book&rsquo;s own figures, and the
   Hex/RGB/vec3 values are derived from them by the dataset author &mdash; so they may differ slightly from a
   screen-picked hex.</p>
+  <p>Webpage designed and built by <a href="https://github.com/supanmaniar">Supan Maniar</a>. Colour data by
+  <a href="https://github.com/mattdesl/dictionary-of-colour-combinations">Matt DesLauriers</a> and
+  <a href="https://github.com/dblodorn/sanzo-wada">Dain M. Blodorn Kim</a>; original interactive site by
+  <a href="https://github.com/bravokiloecho/color-combinations-sanzo-wada-public">ben elwyn</a>. All upstream
+  sources are MIT licensed &mdash; see <a href="ATTRIBUTION.md">ATTRIBUTION.md</a>.</p>
 </footer>
 
 <script>
