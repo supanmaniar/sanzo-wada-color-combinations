@@ -265,7 +265,7 @@ cursor:pointer;transition:background-color .15s var(--ease)}
 #comboModal{width:min(760px,calc(100vw - 2rem));max-height:min(88vh,940px);padding:0;
 border:1px solid var(--border);border-radius:var(--r-xl);background:var(--card);color:var(--fg);
 box-shadow:var(--shadow-hover);overflow:auto;overscroll-behavior:contain}
-#comboModal::backdrop{background:rgba(5,18,48,.5);backdrop-filter:blur(3px)}
+#comboModal::backdrop{background:rgba(5,18,48,.5);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
 .cm-bar{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:8px;
 padding:14px 18px;background:var(--card);border-bottom:1px solid var(--border)}
 .cm-bar .cid{font-weight:700;font-size:1rem}
