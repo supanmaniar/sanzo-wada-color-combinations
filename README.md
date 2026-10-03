@@ -11,15 +11,17 @@ An interactive, searchable web edition of all **348 colour combinations** and **
 - All 348 combinations, filterable by number of colours (2, 3, or 4)
 - Full-text search across colour names, hex values, and combination numbers
 - Hex, RGB, CMYK, and vec3 value formats
-- Light and dark themes, following system preference
+- Light and dark themes, following system preference — both built from swatches in the dictionary (Nile Blue, Deep Indigo, Dark Tyrian Blue, Black, White), with every text/background pairing verified at AA or better
 - Related-combination links with hover and keyboard-focus previews
 - Sort by number, colour count, book, or most-used colours
 - Browse-by-colour index covering all 159 named colours
 - Export the current selection as CSS variables, JSON, or a Tailwind colour map
+- Export any single combination from its own card — the same copy and download formats, scoped to just that swatch
 - Download swatch files: Adobe `.ase`, Photoshop `.aco`, GIMP/Inkscape `.gpl`, and Figma Tokens Studio JSON
-- WCAG contrast checker — pairwise contrast ratios for every combination, graded AAA / AA / AA Large / Fail, with a filter for failing pairs
+- WCAG contrast checker — every combination carries its minimum contrast grade, with the full pairwise breakdown inside each card, graded AAA / AA / AA Large / Fail
 - Shareable URLs — filters, sort, and value format are stored in the query string
 - Apple-inspired interface: SF-style typography, translucent sticky toolbar, soft depth and shadow, refined motion, and full `prefers-reduced-motion` support
+- Sectioned layout: hero with key figures, a two-row toolbar (search, then filters), and clearly headed Browse / Combinations / Export sections
 - Accessible: skip link, visible focus rings, keyboard-operable previews, `aria-live` result counts
 - Print stylesheet for clean paper output
 - Fully self-contained single HTML file — no build step, no external assets, works offline
