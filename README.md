@@ -4,6 +4,8 @@ An interactive, searchable web edition of all **348 colour combinations** and **
 
 **Live site:** https://supanmaniar.github.io/sanzo-wada-color-combinations/
 
+[![The combination grid, showing every card with its swatches, colour names and WCAG grade](./screenshots/01-grid.png)](https://supanmaniar.github.io/sanzo-wada-color-combinations/)
+
 ---
 
 ## Why this edition
@@ -13,6 +15,30 @@ Other editions of this dataset present the colours. This one also tells you whet
 - **WCAG contrast grading on every combination** — each card carries its minimum contrast ratio, graded AAA / AA / AA Large / Low. A **Details** panel opens the full breakdown in a focused modal: the palette, every pair previewed in both directions as text-on-background, and every colour checked against black and white. Filter the whole grid by grade, multi-select.
 - **Export from any swatch** — every combination exports directly to CSS variables, JSON, Tailwind, Adobe `.ase`, Photoshop `.aco`, GIMP `.gpl` or Figma Tokens Studio, scoped to just that swatch or to your current filters.
 - **A palette drawn from the book itself** — the interface is coloured with Wada's own Nile Blue, Deep Indigo and Dark Tyrian Blue, with every text pairing verified at AA or better.
+
+### The Details panel
+
+Every card has a **Details** button. It opens a focused modal with the palette, the full contrast breakdown, and related combinations — so the grid stays compact instead of stretching to fit expanded content.
+
+| Colour on colour | Against black & white |
+| --- | --- |
+| ![Each pair previewed in both directions with real body and large-text samples and a WCAG verdict](./screenshots/02-details-modal.png) | ![Every colour checked against both black and white text, with the better option called out](./screenshots/06-black-white.png) |
+
+Each pair is previewed **in both directions** — A as text on B, and B as text on A — with real body and large-text samples rendered in the actual colours. Contrast is symmetric, so both directions share a ratio; the value is seeing which colour is the text and which is the background.
+
+### Light and dark
+
+Both themes are built from swatches in the dictionary, and every text/background pairing is verified at AA or better.
+
+![The light theme, built from Nile Blue and White](./screenshots/05-light-theme.png)
+
+### On a phone
+
+The details panel becomes a bottom sheet, touch targets grow on coarse-pointer devices, and hover previews are suppressed where there is no hover — so a tap navigates straight to the combination instead of flashing a preview first.
+
+| Grid | Details |
+| --- | --- |
+| ![The grid on a 390px-wide phone](./screenshots/03-mobile-grid.png) | ![The details panel as a bottom sheet on a phone](./screenshots/04-mobile-details.png) |
 
 ---
 
@@ -49,6 +75,8 @@ Other editions of this dataset present the colours. This one also tells you whet
 | --- | --- |
 | [`index.html`](./index.html) | The interactive site (self-contained) |
 | [`og-image.png`](./og-image.png) | Social preview image (1200×630) |
+| [`apple-touch-icon.png`](./apple-touch-icon.png) | Home-screen icon (180×180) |
+| [`screenshots/`](./screenshots) | Screenshots used in this README |
 | [`PALETTE-INDEX.md`](./PALETTE-INDEX.md) | Complete palette index in Markdown — all 348 combinations, 159 colours, 6 swatch books |
 | [`ATTRIBUTION.md`](./ATTRIBUTION.md) | Full credits and licensing detail |
 | [`LICENSE`](./LICENSE) | MIT licence |
