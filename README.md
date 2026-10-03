@@ -18,8 +18,10 @@ An interactive, searchable web edition of all **348 colour combinations** and **
 - Export the current selection as CSS variables, JSON, or a Tailwind colour map
 - Export any single combination from its own card — the same copy and download formats, scoped to just that swatch
 - Download swatch files: Adobe `.ase`, Photoshop `.aco`, GIMP/Inkscape `.gpl`, and Figma Tokens Studio JSON
-- WCAG contrast checker — every combination carries its minimum contrast grade, with the full pairwise breakdown inside each card, graded AAA / AA / AA Large / Fail
-- Filter by contrast grade, multi-select — combine AAA, AA, AA Large and Fail to narrow the grid
+- WCAG contrast checker — every combination carries its minimum contrast grade, with the full pairwise breakdown inside each card, graded AAA / AA / AA Large / Low
+- Filter by contrast grade, multi-select — combine AAA, AA, AA Large and Low to narrow the grid
+- Empty state offers a one-click "Clear all filters" reset
+- `<noscript>` fallback — all 348 combinations remain readable without JavaScript
 - Shareable URLs — filters, sort, and value format are stored in the query string
 - Apple-inspired interface: SF-style typography, translucent sticky toolbar, soft depth and shadow, refined motion, and full `prefers-reduced-motion` support
 - Sectioned layout: hero with key figures, a two-row toolbar (search, then filters), and clearly headed Browse / Combinations / Export sections

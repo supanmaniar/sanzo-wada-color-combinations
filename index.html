@@ -59,6 +59,9 @@ body::before{content:'';position:fixed;inset:0 0 auto;height:460px;pointer-event
 background:radial-gradient(120% 100% at 50% 0%,rgba(18,53,78,.10),transparent 70%)}
 html[data-theme=dark] body::before{background:radial-gradient(120% 100% at 50% 0%,rgba(188,228,229,.10),transparent 70%)}
 ::selection{background:rgba(18,53,78,.22)}
+.noscript{margin:0;padding:var(--s3) 1.5rem;background:var(--card);color:var(--fg);
+border-bottom:1px solid var(--border);font-size:.88rem;text-align:center}
+.noscript a{color:var(--accent)}
 header{padding:var(--s8) 1.5rem var(--s6);max-width:var(--measure);margin:0 auto}
 .eyebrow{font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
 color:var(--accent);margin:0 0 var(--s3)}
@@ -152,6 +155,7 @@ display:flex;flex-direction:column;gap:4px}
 .pv-hint{margin-top:10px;padding-top:8px;border-top:1px solid var(--border);
 font-size:.72rem;color:var(--muted);text-align:center}
 #empty{display:none;text-align:center;color:var(--muted);padding:var(--s8) 1rem;font-size:1.05rem}
+#empty .btn{margin-left:var(--s2);vertical-align:middle}
 #filters{display:none}
 @media (max-width:720px){
 #filters{display:inline-block;margin-left:auto}
@@ -190,11 +194,11 @@ border:1px solid var(--border)}
 .ct-pill.aaa{background:rgba(15,92,38,.16);color:#0d5222}
 .ct-pill.aa{background:rgba(0,65,127,.14);color:#00417f}
 .ct-pill.aal{background:rgba(122,71,0,.16);color:#663b00}
-.ct-pill.fail{background:rgba(156,31,22,.14);color:#7d1810}
+.ct-pill.fail{background:rgba(29,66,87,.10);color:#3a5a6e}
 html[data-theme=dark] .ct-pill.aaa{color:#5ee07a}
 html[data-theme=dark] .ct-pill.aa{color:#6cb6ff}
 html[data-theme=dark] .ct-pill.aal{color:#ffc061}
-html[data-theme=dark] .ct-pill.fail{color:#ff7b70}
+html[data-theme=dark] .ct-pill.fail{color:#8fb4bf}
 .ct-pairs{display:flex;flex-direction:column;gap:4px}
 .ct-pair{display:flex;align-items:center;gap:7px}
 .ct-swatch{width:26px;height:16px;border-radius:4px;border:1px solid var(--chipborder);
@@ -205,11 +209,11 @@ border:1px solid var(--border);margin-left:auto}
 .ct-badge.aaa{background:rgba(15,92,38,.16);color:#0d5222}
 .ct-badge.aa{background:rgba(0,65,127,.14);color:#00417f}
 .ct-badge.aal{background:rgba(122,71,0,.16);color:#663b00}
-.ct-badge.fail{background:rgba(156,31,22,.14);color:#7d1810}
+.ct-badge.fail{background:rgba(29,66,87,.10);color:#3a5a6e}
 html[data-theme=dark] .ct-badge.aaa{color:#5ee07a}
 html[data-theme=dark] .ct-badge.aa{color:#6cb6ff}
 html[data-theme=dark] .ct-badge.aal{color:#ffc061}
-html[data-theme=dark] .ct-badge.fail{color:#ff7b70}
+html[data-theme=dark] .ct-badge.fail{color:#8fb4bf}
 .meta .ct-badge{margin-left:0;font-variant-numeric:tabular-nums}
 .card-export{margin-left:auto;background:transparent;border:1px solid var(--border);
 border-radius:var(--r-sm);color:var(--muted);cursor:pointer;padding:.15rem .45rem;
@@ -268,6 +272,9 @@ html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
+<noscript>
+  <p class="noscript">JavaScript is off, so search, filtering, contrast grades and export are unavailable. All 348 combinations are still listed below, and the full palette index is in <a href="PALETTE-INDEX.md">PALETTE-INDEX.md</a>.</p>
+</noscript>
 <a class="skip" href="#grid">Skip to combinations</a>
 <header>
   <p class="eyebrow">A Dictionary of Color Combinations</p>
@@ -310,7 +317,7 @@ html{scroll-behavior:auto}}
           <button data-g="aaa" aria-pressed="false" title="AAA — 7:1 or better">AAA</button>
           <button data-g="aa" aria-pressed="false" title="AA — 4.5:1 or better">AA</button>
           <button data-g="aal" aria-pressed="false" title="AA Large — 3:1 or better">AA Large</button>
-          <button data-g="fail" aria-pressed="false" title="Fail — below 3:1">Fail</button>
+          <button data-g="fail" aria-pressed="false" title="Low — below 3:1">Low</button>
         </div>
       </span>
       <select id="book" aria-label="Filter by swatch book">
@@ -349,7 +356,7 @@ html{scroll-behavior:auto}}
       <span class="ct-pill aaa">AAA</span> 7:1+
       <span class="ct-pill aa">AA</span> 4.5:1+
       <span class="ct-pill aal">AA Large</span> 3:1+
-      <span class="ct-pill fail">Fail</span> &lt;3:1
+      <span class="ct-pill fail">Low</span> &lt;3:1
     </p>
   </div>
   <div class="grid" id="grid">
@@ -702,7 +709,7 @@ html{scroll-behavior:auto}}
 <article class="card" id="c-347" data-num="347" data-count="4" data-books="CDE" data-search="347 olive yellow sea green helvetia blue lilac #a6a159 #00b49b #005b8d #b984af c d e"><div class="chips"><span class="chip" style="background:#a6a159" title="Olive Yellow &middot; #a6a159"></span><span class="chip" style="background:#00b49b" title="Sea Green &middot; #00b49b"></span><span class="chip" style="background:#005b8d" title="Helvetia Blue &middot; #005b8d"></span><span class="chip" style="background:#b984af" title="Lilac &middot; #b984af"></span></div><div class="meta"><span class="cid">#347</span><span class="cnt">4 colours</span><span class="bk-badge">Books C,D,E</span></div><ul class="colors"><li><span class="dot" style="background:#a6a159"></span><span class="nm">Olive Yellow</span><span class="bk">C</span><button class="val" data-copy="#a6a159" data-hex="#a6a159" data-rgb="RGB(166, 161, 89)" data-cmyk="CMYK(40, 30, 80, 0)" data-vec3="vec3(0.651, 0.631, 0.349)" title="Copy value">#a6a159</button></li><li><span class="dot" style="background:#00b49b"></span><span class="nm">Sea Green</span><span class="bk">C</span><button class="val" data-copy="#00b49b" data-hex="#00b49b" data-rgb="RGB(0, 180, 155)" data-cmyk="CMYK(80, 0, 51, 0)" data-vec3="vec3(0.0, 0.706, 0.608)" title="Copy value">#00b49b</button></li><li><span class="dot" style="background:#005b8d"></span><span class="nm">Helvetia Blue</span><span class="bk">D</span><button class="val" data-copy="#005b8d" data-hex="#005b8d" data-rgb="RGB(0, 91, 141)" data-cmyk="CMYK(100, 62, 19, 10)" data-vec3="vec3(0.0, 0.357, 0.553)" title="Copy value">#005b8d</button></li><li><span class="dot" style="background:#b984af"></span><span class="nm">Lilac</span><span class="bk">E</span><button class="val" data-copy="#b984af" data-hex="#b984af" data-rgb="RGB(185, 132, 175)" data-cmyk="CMYK(28, 54, 8, 0)" data-vec3="vec3(0.725, 0.518, 0.686)" title="Copy value">#b984af</button></li></ul><details><summary>Related combinations (23)</summary><div class="rel"><a href="#c-17">#17</a> <a href="#c-21">#21</a> <a href="#c-39">#39</a> <a href="#c-48">#48</a> <a href="#c-58">#58</a> <a href="#c-86">#86</a> <a href="#c-124">#124</a> <a href="#c-133">#133</a> <a href="#c-143">#143</a> <a href="#c-161">#161</a> <a href="#c-162">#162</a> <a href="#c-187">#187</a> <a href="#c-211">#211</a> <a href="#c-218">#218</a> <a href="#c-250">#250</a> <a href="#c-259">#259</a> <a href="#c-260">#260</a> <a href="#c-265">#265</a> <a href="#c-282">#282</a> <a href="#c-284">#284</a> <a href="#c-291">#291</a> <a href="#c-312">#312</a> <a href="#c-340">#340</a></div></details></article>
 <article class="card" id="c-348" data-num="348" data-count="4" data-books="BCE" data-search="348 olive buff cossack green deep slate olive cotinga purple #c1c494 #437742 #253122 #501345 b c e"><div class="chips"><span class="chip" style="background:#c1c494" title="Olive Buff &middot; #c1c494"></span><span class="chip" style="background:#437742" title="Cossack Green &middot; #437742"></span><span class="chip" style="background:#253122" title="Deep Slate Olive &middot; #253122"></span><span class="chip" style="background:#501345" title="Cotinga Purple &middot; #501345"></span></div><div class="meta"><span class="cid">#348</span><span class="cnt">4 colours</span><span class="bk-badge">Books B,C,E</span></div><ul class="colors"><li><span class="dot" style="background:#c1c494"></span><span class="nm">Olive Buff</span><span class="bk">B</span><button class="val" data-copy="#c1c494" data-hex="#c1c494" data-rgb="RGB(193, 196, 148)" data-cmyk="CMYK(16, 6, 42, 12)" data-vec3="vec3(0.757, 0.769, 0.58)" title="Copy value">#c1c494</button></li><li><span class="dot" style="background:#437742"></span><span class="nm">Cossack Green</span><span class="bk">C</span><button class="val" data-copy="#437742" data-hex="#437742" data-rgb="RGB(67, 119, 66)" data-cmyk="CMYK(76, 32, 91, 18)" data-vec3="vec3(0.263, 0.467, 0.259)" title="Copy value">#437742</button></li><li><span class="dot" style="background:#253122"></span><span class="nm">Deep Slate Olive</span><span class="bk">C</span><button class="val" data-copy="#253122" data-hex="#253122" data-rgb="RGB(37, 49, 34)" data-cmyk="CMYK(76, 60, 80, 62)" data-vec3="vec3(0.145, 0.192, 0.133)" title="Copy value">#253122</button></li><li><span class="dot" style="background:#501345"></span><span class="nm">Cotinga Purple</span><span class="bk">E</span><button class="val" data-copy="#501345" data-hex="#501345" data-rgb="RGB(80, 19, 69)" data-cmyk="CMYK(66, 100, 42, 40)" data-vec3="vec3(0.314, 0.075, 0.271)" title="Copy value">#501345</button></li></ul><details><summary>Related combinations (26)</summary><div class="rel"><a href="#c-5">#5</a> <a href="#c-61">#61</a> <a href="#c-83">#83</a> <a href="#c-135">#135</a> <a href="#c-175">#175</a> <a href="#c-181">#181</a> <a href="#c-189">#189</a> <a href="#c-200">#200</a> <a href="#c-229">#229</a> <a href="#c-238">#238</a> <a href="#c-253">#253</a> <a href="#c-262">#262</a> <a href="#c-268">#268</a> <a href="#c-270">#270</a> <a href="#c-278">#278</a> <a href="#c-294">#294</a> <a href="#c-303">#303</a> <a href="#c-307">#307</a> <a href="#c-310">#310</a> <a href="#c-319">#319</a> <a href="#c-321">#321</a> <a href="#c-329">#329</a> <a href="#c-330">#330</a> <a href="#c-332">#332</a> <a href="#c-341">#341</a> <a href="#c-342">#342</a></div></details></article>
   </div>
-  <p id="empty">No combinations match those filters.</p>
+  <p id="empty">No combinations match those filters. <button type="button" id="clearFilters" class="btn">Clear all filters</button></p>
 </main>
 
 <section class="section" id="export" aria-labelledby="export-h">
@@ -878,6 +885,17 @@ html{scroll-behavior:auto}}
     apply();
   });
 
+  document.getElementById('clearFilters').addEventListener('click', function(){
+    q.value=''; countFilter='all'; gradeFilter=[]; book.value='all'; sortSel.value='num';
+    document.querySelectorAll('#countFilter button').forEach(function(b){
+      b.setAttribute('aria-pressed', String(b.dataset.c==='all')); });
+    document.querySelectorAll('#gradeFilter button').forEach(function(b){
+      b.setAttribute('aria-pressed','false'); });
+    sortCards(); apply();
+    q.focus();
+    showToast('Filters cleared');
+  });
+
   // ---- toast ----
   var toast=document.getElementById('toast'), toastTimer=null;
   function showToast(msg){
@@ -982,7 +1000,7 @@ html{scroll-behavior:auto}}
     if(r>=7) return {k:'aaa', t:'AAA'};
     if(r>=4.5) return {k:'aa', t:'AA'};
     if(r>=3) return {k:'aal', t:'AA Large'};
-    return {k:'fail', t:'Fail'};
+    return {k:'fail', t:'Low'};
   }
   function bestTextOn(hex){
     var w=contrast(hex,'#ffffff'), b=contrast(hex,'#000000');
