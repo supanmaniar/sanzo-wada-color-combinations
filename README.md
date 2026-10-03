@@ -6,6 +6,16 @@ An interactive, searchable web edition of all **348 colour combinations** and **
 
 ---
 
+## Why this edition
+
+Other editions of this dataset present the colours. This one also tells you whether you can actually use them:
+
+- **WCAG contrast grading on every combination** — each card carries its minimum contrast ratio, graded AAA / AA / AA Large / Low, with the full pairwise breakdown one click away. Filter the whole grid by grade, multi-select.
+- **Export from any swatch** — every combination exports directly to CSS variables, JSON, Tailwind, Adobe `.ase`, Photoshop `.aco`, GIMP `.gpl` or Figma Tokens Studio, scoped to just that swatch or to your current filters.
+- **A palette drawn from the book itself** — the interface is coloured with Wada's own Nile Blue, Deep Indigo and Dark Tyrian Blue, with every text pairing verified at AA or better.
+
+---
+
 ## Features
 
 - All 348 combinations, filterable by number of colours (2, 3, or 4)
@@ -38,6 +48,8 @@ An interactive, searchable web edition of all **348 colour combinations** and **
 | [`PALETTE-INDEX.md`](./PALETTE-INDEX.md) | Complete palette index in Markdown — all 348 combinations, 159 colours, 6 swatch books |
 | [`ATTRIBUTION.md`](./ATTRIBUTION.md) | Full credits and licensing detail |
 | [`LICENSE`](./LICENSE) | MIT licence |
+| [`robots.txt`](./robots.txt) | Crawler policy and sitemap pointer |
+| [`sitemap.xml`](./sitemap.xml) | Sitemap for search engines |
 
 ## Data
 

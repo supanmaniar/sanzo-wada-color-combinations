@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://supanmaniar.github.io/sanzo-wada-color-combinations/sitemap.xml
