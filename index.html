@@ -140,7 +140,13 @@ summary::before{content:'\25B8';display:inline-block;margin-right:.4rem;
 transition:transform .2s var(--ease)}
 details[open] summary::before{transform:rotate(90deg)}
 summary:hover{color:var(--fg)}
-.rel{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.rel-groups{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+.rel-group{display:flex;flex-direction:column;gap:5px}
+.rel-head{display:flex;align-items:center;gap:6px;font-size:.75rem;font-weight:600;color:var(--fg)}
+.rel-head .dot{width:10px;height:10px;border-radius:3px;border:1px solid var(--chipborder);flex:0 0 auto}
+.rel-head .nm{flex:0 1 auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rel-head .ct{color:var(--muted);font-weight:500;font-size:.7rem;font-variant-numeric:tabular-nums}
+.rel{display:flex;flex-wrap:wrap;gap:6px}
 .rel a{color:var(--accent);text-decoration:none;border:1px solid var(--border);border-radius:var(--r-sm);
 padding:.1rem .5rem;font-size:.75rem;
 transition:background-color .2s var(--ease),transform .15s var(--ease)}
@@ -795,6 +801,57 @@ html{scroll-behavior:auto}}
     c.dataset.used=score;
   });
 
+  // ---- group related combinations by the colour they share ----
+  var byId={}; cards.forEach(function(c){ byId[c.id]=c; });
+
+  function cardColourNames(card){
+    return Array.prototype.map.call(card.querySelectorAll('.colors li'), function(li){
+      return li.querySelector('.nm').textContent;
+    });
+  }
+
+  cards.forEach(function(c){
+    var det=c.querySelector('details');
+    if(!det) return;
+    var rel=det.querySelector('.rel');
+    if(!rel) return;
+
+    var mine=cardColourNames(c);
+    var groups={}; mine.forEach(function(nm){ groups[nm]=[]; });
+
+    Array.prototype.forEach.call(rel.querySelectorAll('a'), function(a){
+      var other=byId[a.getAttribute('href').slice(1)];
+      if(!other) return;
+      var theirs=cardColourNames(other);
+      mine.forEach(function(nm){
+        if(theirs.indexOf(nm)!==-1) groups[nm].push(a);
+      });
+    });
+
+    var wrap=document.createElement('div');
+    wrap.className='rel-groups';
+    mine.forEach(function(nm){
+      var links=groups[nm];
+      if(!links.length) return;
+      var hex=(colourIndex[nm]||{}).hex||'';
+      var g=document.createElement('div');
+      g.className='rel-group';
+      var head=document.createElement('div');
+      head.className='rel-head';
+      head.innerHTML='<span class="dot" style="background:'+hex+'"></span>'+
+        '<span class="nm">'+nm+'</span>'+
+        '<span class="ct">'+links.length+'</span>';
+      var row=document.createElement('div');
+      row.className='rel';
+      links.forEach(function(a){ row.appendChild(a); });
+      g.appendChild(head); g.appendChild(row);
+      wrap.appendChild(g);
+    });
+
+    rel.parentNode.replaceChild(wrap, rel);
+    det.querySelector('summary').textContent='Related combinations ('+det.querySelectorAll('.rel a').length+')';
+  });
+
   function apply(){
     var term=q.value.trim().toLowerCase(), bk=book.value, shown=0;
     cards.forEach(function(c){
@@ -1009,8 +1066,6 @@ html{scroll-behavior:auto}}
     var w=contrast(hex,'#ffffff'), b=contrast(hex,'#000000');
     return w>=b ? {hex:'#ffffff', ratio:w} : {hex:'#000000', ratio:b};
   }
-
-  var byId={}; cards.forEach(function(c){ byId[c.id]=c; });
 
   var ctData=[];
   cards.forEach(function(c){

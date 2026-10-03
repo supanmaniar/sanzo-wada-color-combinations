@@ -22,7 +22,7 @@ Other editions of this dataset present the colours. This one also tells you whet
 - Full-text search across colour names, hex values, and combination numbers
 - Hex, RGB, CMYK, and vec3 value formats
 - Light and dark themes, following system preference — both built from swatches in the dictionary (Nile Blue, Deep Indigo, Dark Tyrian Blue, Black, White), with every text/background pairing verified at AA or better
-- Related-combination links with hover and keyboard-focus previews
+- Related-combination links grouped by the colour they share, each group headed by the colour's swatch and name, with hover and keyboard-focus previews
 - Sort by number, colour count, book, or most-used colours
 - Browse-by-colour index covering all 159 named colours
 - Export the current selection as CSS variables, JSON, or a Tailwind colour map
