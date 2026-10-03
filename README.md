@@ -16,6 +16,8 @@ An interactive, searchable web edition of all **348 colour combinations** and **
 - Sort by number, colour count, book, or most-used colours
 - Browse-by-colour index covering all 159 named colours
 - Export the current selection as CSS variables, JSON, or a Tailwind colour map
+- Download swatch files: Adobe `.ase`, Photoshop `.aco`, GIMP/Inkscape `.gpl`, and Figma Tokens Studio JSON
+- WCAG contrast checker — pairwise contrast ratios for every combination, graded AAA / AA / AA Large / Fail, with a filter for failing pairs
 - Shareable URLs — filters, sort, and value format are stored in the query string
 - Apple-inspired interface: SF-style typography, translucent sticky toolbar, soft depth and shadow, refined motion, and full `prefers-reduced-motion` support
 - Accessible: skip link, visible focus rings, keyboard-operable previews, `aria-live` result counts

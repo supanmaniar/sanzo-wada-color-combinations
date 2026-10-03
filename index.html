@@ -167,6 +167,45 @@ transition:background-color .2s var(--ease),transform .15s var(--ease)}
 background:var(--fg);color:var(--bg);padding:.6rem 1.1rem;border-radius:999px;font-size:.85rem;
 font-weight:500;opacity:0;pointer-events:none;transition:opacity .25s var(--ease),transform .25s var(--ease)}
 #toast.on{opacity:1;transform:translate(-50%,0)}
+#contrast{max-width:1320px;margin:0 auto;padding:0 1.5rem 1rem}
+#contrast details{border:1px solid var(--border);border-radius:16px;background:var(--card);
+padding:0 16px;box-shadow:var(--shadow)}
+#contrast summary{padding:14px 0;font-weight:600;color:var(--fg);font-size:.95rem}
+.ct-tools{display:flex;flex-wrap:wrap;gap:1rem;align-items:center;padding-bottom:12px;
+font-size:.8rem;color:var(--muted)}
+.ct-opt{display:flex;align-items:center;gap:.4rem;cursor:pointer}
+.ct-legend{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}
+.ct-pill{border-radius:999px;padding:.05rem .45rem;font-size:.68rem;font-weight:600;
+border:1px solid var(--border)}
+.ct-pill.aaa{background:rgba(48,209,88,.18);color:#1a7f37}
+.ct-pill.aa{background:rgba(0,113,227,.15);color:#0062c4}
+.ct-pill.aal{background:rgba(255,159,10,.18);color:#9a5b00}
+.ct-pill.fail{background:rgba(255,69,58,.16);color:#c4271c}
+html[data-theme=dark] .ct-pill.aaa{color:#5ee07a}
+html[data-theme=dark] .ct-pill.aa{color:#6cb6ff}
+html[data-theme=dark] .ct-pill.aal{color:#ffc061}
+html[data-theme=dark] .ct-pill.fail{color:#ff7b70}
+.ct-grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+padding-bottom:16px}
+.ct-card{border:1px solid var(--border);border-radius:12px;padding:10px;font-size:.78rem}
+.ct-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.ct-head .cid{font-size:.85rem}
+.ct-head .ct-min{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--muted)}
+.ct-pairs{display:flex;flex-direction:column;gap:4px}
+.ct-pair{display:flex;align-items:center;gap:7px}
+.ct-swatch{width:26px;height:16px;border-radius:4px;border:1px solid var(--chipborder);
+display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:700;flex:0 0 auto}
+.ct-ratio{font-variant-numeric:tabular-nums;color:var(--muted);min-width:44px}
+.ct-badge{border-radius:999px;padding:.05rem .4rem;font-size:.65rem;font-weight:600;
+border:1px solid var(--border);margin-left:auto}
+.ct-badge.aaa{background:rgba(48,209,88,.18);color:#1a7f37}
+.ct-badge.aa{background:rgba(0,113,227,.15);color:#0062c4}
+.ct-badge.aal{background:rgba(255,159,10,.18);color:#9a5b00}
+.ct-badge.fail{background:rgba(255,69,58,.16);color:#c4271c}
+html[data-theme=dark] .ct-badge.aaa{color:#5ee07a}
+html[data-theme=dark] .ct-badge.aa{color:#6cb6ff}
+html[data-theme=dark] .ct-badge.aal{color:#ffc061}
+html[data-theme=dark] .ct-badge.fail{color:#ff7b70}
 footer{max-width:1320px;margin:0 auto;padding:3rem 1.5rem 5rem;color:var(--muted);font-size:.8rem;
 border-top:1px solid var(--border);line-height:1.75}
 footer a{color:var(--accent);text-decoration:none}
@@ -606,7 +645,27 @@ html{scroll-behavior:auto}}
   <button class="btn" id="copyCss">Copy as CSS variables</button>
   <button class="btn" id="copyJson">Copy as JSON</button>
   <button class="btn" id="copyTailwind">Copy as Tailwind</button>
+  <button class="btn" id="dlAse">Download .ase</button>
+  <button class="btn" id="dlAco">Download .aco</button>
+  <button class="btn" id="dlGpl">Download .gpl</button>
+  <button class="btn" id="dlTokens">Download Figma tokens</button>
 </div>
+
+<section id="contrast" aria-label="Contrast checker">
+  <details>
+    <summary>Contrast checker &mdash; WCAG ratios for every combination</summary>
+    <div class="ct-tools">
+      <label class="ct-opt"><input type="checkbox" id="ctOnlyFail"> Show only combinations with a failing pair</label>
+      <span class="ct-legend">
+        <span class="ct-pill aaa">AAA</span> 7:1+
+        <span class="ct-pill aa">AA</span> 4.5:1+
+        <span class="ct-pill aal">AA Large</span> 3:1+
+        <span class="ct-pill fail">Fail</span> &lt;3:1
+      </span>
+    </div>
+    <div class="ct-grid" id="ctGrid"></div>
+  </details>
+</section>
 
 <div id="toast" role="status" aria-live="polite"></div>
 
@@ -639,7 +698,7 @@ html{scroll-behavior:auto}}
   cards.forEach(function(c){
     c.querySelectorAll('.colors li').forEach(function(li){
       var nm=li.querySelector('.nm').textContent;
-      var hex=li.querySelector('.dot').style.background;
+      var hex=li.querySelector('.val').dataset.hex;
       var bk=li.querySelector('.bk').textContent;
       if(!colourIndex[nm]) colourIndex[nm]={hex:hex, book:bk, count:0};
       colourIndex[nm].count++;
@@ -779,7 +838,7 @@ html{scroll-behavior:auto}}
       c.querySelectorAll('.colors li').forEach(function(li){
         var nm=li.querySelector('.nm').textContent;
         if(seen[nm]) return; seen[nm]=1;
-        out.push({name:nm, hex:li.querySelector('.dot').style.background,
+        out.push({name:nm, hex:li.querySelector('.val').dataset.hex,
                   book:li.querySelector('.bk').textContent});
       });
     });
@@ -803,6 +862,183 @@ html{scroll-behavior:auto}}
     copyText('colors: {\n'+c.map(function(x){
       return "  '"+slug(x.name)+"': '"+x.hex+"',"; }).join('\n')+'\n}',
       'Copied '+c.length+' Tailwind colours');
+  });
+
+  // ---- WCAG contrast checker ----
+  function hexToRgb(h){
+    h=h.replace('#','');
+    if(h.length===3) h=h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+    return [parseInt(h.slice(0,2),16), parseInt(h.slice(2,4),16), parseInt(h.slice(4,6),16)];
+  }
+  function relLum(rgb){
+    var c=rgb.map(function(v){
+      v/=255;
+      return v<=0.03928 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4);
+    });
+    return 0.2126*c[0] + 0.7152*c[1] + 0.0722*c[2];
+  }
+  function contrast(a,b){
+    var la=relLum(hexToRgb(a)), lb=relLum(hexToRgb(b));
+    var hi=Math.max(la,lb), lo=Math.min(la,lb);
+    return (hi+0.05)/(lo+0.05);
+  }
+  function grade(r){
+    if(r>=7) return {k:'aaa', t:'AAA'};
+    if(r>=4.5) return {k:'aa', t:'AA'};
+    if(r>=3) return {k:'aal', t:'AA Large'};
+    return {k:'fail', t:'Fail'};
+  }
+  function bestTextOn(hex){
+    var w=contrast(hex,'#ffffff'), b=contrast(hex,'#000000');
+    return w>=b ? {hex:'#ffffff', ratio:w} : {hex:'#000000', ratio:b};
+  }
+
+  var ctGrid=document.getElementById('ctGrid');
+  var ctData=[];
+  cards.forEach(function(c){
+    var cols=[];
+    c.querySelectorAll('.colors li').forEach(function(li){
+      cols.push({name:li.querySelector('.nm').textContent,
+                 hex:li.querySelector('.val').dataset.hex});
+    });
+    var pairs=[], min=Infinity;
+    for(var i=0;i<cols.length;i++){
+      for(var j=i+1;j<cols.length;j++){
+        var r=contrast(cols[i].hex, cols[j].hex);
+        if(r<min) min=r;
+        pairs.push({a:cols[i], b:cols[j], ratio:r});
+      }
+    }
+    pairs.sort(function(x,y){ return x.ratio-y.ratio; });
+    ctData.push({id:c.id, num:c.dataset.num, cols:cols, pairs:pairs, min:min});
+  });
+
+  function renderContrast(onlyFail){
+    var html='';
+    ctData.forEach(function(d){
+      if(onlyFail && d.min>=3) return;
+      var g=grade(d.min);
+      var rows=d.pairs.map(function(p){
+        var pg=grade(p.ratio);
+        var txt=bestTextOn(p.a.hex);
+        return '<div class="ct-pair">'+
+          '<span class="ct-swatch" style="background:'+p.a.hex+';color:'+txt.hex+'">A</span>'+
+          '<span class="ct-swatch" style="background:'+p.b.hex+';color:'+bestTextOn(p.b.hex).hex+'">A</span>'+
+          '<span class="ct-ratio">'+p.ratio.toFixed(2)+':1</span>'+
+          '<span class="ct-badge '+pg.k+'">'+pg.t+'</span></div>';
+      }).join('');
+      html+='<div class="ct-card"><div class="ct-head">'+
+        '<span class="cid">#'+d.num+'</span>'+
+        '<span class="ct-min">min '+d.min.toFixed(2)+':1</span>'+
+        '<span class="ct-badge '+g.k+'">'+g.t+'</span></div>'+
+        '<div class="ct-pairs">'+rows+'</div></div>';
+    });
+    ctGrid.innerHTML = html || '<p style="color:var(--muted);font-size:.85rem">No combinations match.</p>';
+  }
+  renderContrast(false);
+  document.getElementById('ctOnlyFail').addEventListener('change', function(){
+    renderContrast(this.checked);
+  });
+
+  // ---- swatch file export ----
+  function download(blob, filename){
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    a.href=url; a.download=filename;
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+  }
+
+  // Adobe Swatch Exchange (.ase)
+  function buildAse(colours){
+    var blocks=[];
+    function str(s){ var b=[]; for(var i=0;i<s.length;i++) b.push(s.charCodeAt(i)&0xff); return b; }
+    function u16(n){ return [n>>8 & 0xff, n & 0xff]; }
+    function u32(n){ return [n>>>24 & 0xff, n>>>16 & 0xff, n>>>8 & 0xff, n & 0xff]; }
+    function f32(n){
+      var buf=new ArrayBuffer(4); new DataView(buf).setFloat32(0, n, false);
+      return Array.prototype.slice.call(new Uint8Array(buf));
+    }
+    colours.forEach(function(c){
+      var rgb=hexToRgb(c.hex);
+      var name=c.name, nb=str(name);
+      var body=[].concat(u16(name.length+1), nb, [0], str('RGB '),
+        f32(rgb[0]/255), f32(rgb[1]/255), f32(rgb[2]/255), u16(0));
+      blocks.push([].concat(u16(0x0001), u32(body.length), body));
+    });
+    var head=[].concat(str('ASEF'), u16(1), u16(0), u32(blocks.length));
+    var out=head;
+    blocks.forEach(function(b){ out=out.concat(b); });
+    return new Uint8Array(out);
+  }
+
+  // Photoshop colour swatches (.aco)
+  function buildAco(colours){
+    function u16(n){ return [n>>8 & 0xff, n & 0xff]; }
+    function u32(n){ return [n>>>24 & 0xff, n>>>16 & 0xff, n>>>8 & 0xff, n & 0xff]; }
+    var out=[].concat(u16(1), u16(colours.length));
+    colours.forEach(function(c){
+      var rgb=hexToRgb(c.hex);
+      out=out.concat(u16(0), u16(rgb[0]*257), u16(rgb[1]*257), u16(rgb[2]*257), u16(0));
+    });
+    // v2 block with names (UTF-16BE, length includes null terminator)
+    out=out.concat(u16(2), u16(colours.length));
+    colours.forEach(function(c){
+      var rgb=hexToRgb(c.hex);
+      var name=c.name, nb=[];
+      for(var i=0;i<name.length;i++){
+        var code=name.charCodeAt(i);
+        nb.push(code>>8 & 0xff, code & 0xff);
+      }
+      nb.push(0, 0);
+      out=out.concat(u16(0), u16(rgb[0]*257), u16(rgb[1]*257), u16(rgb[2]*257), u16(0),
+        u32(name.length+1), nb);
+    });
+    return new Uint8Array(out);
+  }
+
+  // GIMP / Inkscape palette (.gpl)
+  function buildGpl(colours){
+    var lines=['GIMP Palette','Name: Sanzo Wada - A Dictionary of Color Combinations',
+      'Columns: 8','#'];
+    colours.forEach(function(c){
+      var rgb=hexToRgb(c.hex);
+      var pad=function(n){ return ('  '+n).slice(-3); };
+      lines.push(pad(rgb[0])+' '+pad(rgb[1])+' '+pad(rgb[2])+'\t'+c.name);
+    });
+    return lines.join('\n')+'\n';
+  }
+
+  // Figma Tokens Studio JSON
+  function buildTokens(colours){
+    var o={};
+    colours.forEach(function(c){
+      o[slug(c.name)]={ '$type':'color', '$value':c.hex,
+        '$description':'Book '+c.book+' - Sanzo Wada' };
+    });
+    return JSON.stringify({ 'sanzo-wada': { color: o } }, null, 2);
+  }
+
+  document.getElementById('dlAse').addEventListener('click', function(){
+    var c=visibleColours();
+    download(new Blob([buildAse(c)], {type:'application/octet-stream'}), 'sanzo-wada.ase');
+    showToast('Downloaded sanzo-wada.ase ('+c.length+' colours)');
+  });
+  document.getElementById('dlAco').addEventListener('click', function(){
+    var c=visibleColours();
+    download(new Blob([buildAco(c)], {type:'application/octet-stream'}), 'sanzo-wada.aco');
+    showToast('Downloaded sanzo-wada.aco ('+c.length+' colours)');
+  });
+  document.getElementById('dlGpl').addEventListener('click', function(){
+    var c=visibleColours();
+    download(new Blob([buildGpl(c)], {type:'text/plain'}), 'sanzo-wada.gpl');
+    showToast('Downloaded sanzo-wada.gpl ('+c.length+' colours)');
+  });
+  document.getElementById('dlTokens').addEventListener('click', function(){
+    var c=visibleColours();
+    download(new Blob([buildTokens(c)], {type:'application/json'}), 'sanzo-wada.tokens.json');
+    showToast('Downloaded Figma tokens ('+c.length+' colours)');
   });
 
   // ---- mobile toolbar collapse ----
