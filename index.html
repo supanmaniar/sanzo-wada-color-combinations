@@ -222,6 +222,8 @@ display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weig
 display:flex;flex-direction:column;gap:3px;overflow:hidden}
 .ct-pv-body{font-size:.78rem;line-height:1.3}
 .ct-pv-large{font-size:1.05rem;font-weight:700;line-height:1.25}
+.ct-subhead{font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);
+font-weight:600;margin:12px 0 7px;padding-top:10px;border-top:1px solid var(--border)}
 .ct-badge{border-radius:var(--r-pill);padding:.05rem .4rem;font-size:.65rem;font-weight:600;
 border:1px solid var(--border);margin-left:auto}
 .ct-badge.aaa{background:rgba(15,92,38,.16);color:#0d5222}
@@ -370,7 +372,7 @@ html{scroll-behavior:auto}}
 <main>
   <div class="section-head">
     <h2 id="grid-h">Combinations</h2>
-    <p>Every combination, with its WCAG contrast grade. Expand a card for the full pairwise breakdown, with a live preview of each colour used as text on the other.</p>
+    <p>Every combination, with its WCAG contrast grade. Expand a card for the full pairwise breakdown, with a live preview of each colour used as text on the other, plus every colour checked against black and white.</p>
     <p class="ct-legend">
       <span class="ct-pill aaa">AAA</span> 7:1+
       <span class="ct-pill aa">AA</span> 4.5:1+
@@ -1076,6 +1078,11 @@ html{scroll-behavior:auto}}
     var w=contrast(hex,'#ffffff'), b=contrast(hex,'#000000');
     return w>=b ? {hex:'#ffffff', ratio:w} : {hex:'#000000', ratio:b};
   }
+  // Contrast of a colour against the two universal text colours.
+  function textOn(hex){
+    return [{name:'White', hex:'#ffffff', ratio:contrast(hex,'#ffffff')},
+            {name:'Black', hex:'#000000', ratio:contrast(hex,'#000000')}];
+  }
   function esc(s){
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
@@ -1153,10 +1160,36 @@ html{scroll-behavior:auto}}
         '<div class="ct-dir">'+dirs+'</div></div>';
     }).join('');
 
+    // black and white are the universal text colours, so check every colour
+    // in the combination against both, regardless of what else is in it
+    var bwRows=d.cols.map(function(col){
+      var opts=textOn(col.hex);
+      var best=opts[0].ratio>=opts[1].ratio ? opts[0] : opts[1];
+      var inner=opts.map(function(o){
+        var v=textVerdict(o.ratio);
+        return '<div class="ct-dir-block">'+
+          '<div class="ct-dir-row">'+
+          '<span class="ct-dir-tag">'+o.name+' on '+esc(col.name)+'</span>'+
+          '<span class="ct-badge '+v.k+'">'+v.t+'</span></div>'+
+          '<div class="ct-preview" style="background:'+col.hex+';color:'+o.hex+'">'+
+          '<span class="ct-pv-body">The quick brown fox jumps over the lazy dog</span>'+
+          '<span class="ct-pv-large">Large text sample</span>'+
+          '</div></div>';
+      }).join('');
+      return '<div class="ct-pair">'+
+        '<div class="ct-pair-head">'+
+        '<span class="ct-swatch" style="background:'+col.hex+';color:'+best.hex+'">A</span>'+
+        '<span class="ct-ratio">'+best.ratio.toFixed(2)+':1</span>'+
+        '<span class="ct-badge '+grade(best.ratio).k+'">best: '+best.name+'</span></div>'+
+        '<div class="ct-dir">'+inner+'</div></div>';
+    }).join('');
+
     var det=document.createElement('details');
     det.className='ct-detail';
     det.innerHTML='<summary>Contrast ('+d.pairs.length+' pair'+(d.pairs.length===1?'':'s')+')</summary>'+
-      '<div class="ct-pairs">'+rows+'</div>';
+      '<div class="ct-pairs">'+rows+'</div>'+
+      '<div class="ct-subhead">Against black &amp; white</div>'+
+      '<div class="ct-pairs">'+bwRows+'</div>';
     card.appendChild(det);
   });
 
