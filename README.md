@@ -37,6 +37,7 @@ Other editions of this dataset present the colours. This one also tells you whet
 - `<noscript>` fallback — all 348 combinations remain readable without JavaScript
 - Shareable URLs — filters, sort, and value format are stored in the query string
 - Apple-inspired interface: SF-style typography, translucent sticky toolbar, soft depth and shadow, refined motion, and full `prefers-reduced-motion` support
+- Responsive down to small phones — the hero trims itself on narrow and short viewports, the details panel becomes a bottom sheet, and touch targets grow on coarse-pointer devices. Hover previews are suppressed where there is no hover, so a tap navigates straight to the combination instead of flashing a preview first
 - Sectioned layout: hero with key figures, a two-row toolbar (search, then filters), and clearly headed Browse / Combinations / Export sections
 - Accessible: skip link, visible focus rings, keyboard-operable previews, `aria-live` result counts
 - Print stylesheet for clean paper output
