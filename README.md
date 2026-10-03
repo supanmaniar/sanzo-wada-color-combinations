@@ -12,8 +12,14 @@ An interactive, searchable web edition of all **348 colour combinations** and **
 - Full-text search across colour names, hex values, and combination numbers
 - Hex, RGB, CMYK, and vec3 value formats
 - Light and dark themes, following system preference
-- Related-combination links between palettes
+- Related-combination links with hover and keyboard-focus previews
+- Sort by number, colour count, book, or most-used colours
+- Browse-by-colour index covering all 159 named colours
+- Export the current selection as CSS variables, JSON, or a Tailwind colour map
+- Shareable URLs — filters, sort, and value format are stored in the query string
 - Apple-inspired interface: SF-style typography, translucent sticky toolbar, soft depth and shadow, refined motion, and full `prefers-reduced-motion` support
+- Accessible: skip link, visible focus rings, keyboard-operable previews, `aria-live` result counts
+- Print stylesheet for clean paper output
 - Fully self-contained single HTML file — no build step, no external assets, works offline
 
 ## Contents
@@ -21,6 +27,7 @@ An interactive, searchable web edition of all **348 colour combinations** and **
 | File | Description |
 | --- | --- |
 | [`index.html`](./index.html) | The interactive site (self-contained) |
+| [`og-image.png`](./og-image.png) | Social preview image (1200×630) |
 | [`PALETTE-INDEX.md`](./PALETTE-INDEX.md) | Complete palette index in Markdown — all 348 combinations, 159 colours, 6 swatch books |
 | [`ATTRIBUTION.md`](./ATTRIBUTION.md) | Full credits and licensing detail |
 | [`LICENSE`](./LICENSE) | MIT licence |
